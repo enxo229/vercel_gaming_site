@@ -74,10 +74,13 @@ export const PlayingScreen: React.FC = () => {
         <div className="w-full h-screen max-w-lg md:max-w-4xl mx-auto flex flex-col font-sans select-none">
 
             {/* 65% BATTLE ARENA */}
-            <div className="relative w-full h-[65vh] bg-[#d0f8d0] overflow-hidden">
+            <div
+                className="relative w-full h-[65vh] overflow-hidden bg-cover bg-bottom"
+                style={{ backgroundImage: 'url("/sprites/background.png")' }}
+            >
                 {/* Arena Background circles/ellipses (Optional decorative to ground sprites) */}
-                <div className="absolute top-20 right-8 w-48 h-12 bg-green-300 rounded-[100%] opacity-50"></div>
-                <div className="absolute bottom-12 left-8 w-64 h-16 bg-green-300 rounded-[100%] opacity-50"></div>
+                <div className="absolute top-20 right-8 w-48 h-12 bg-black/20 rounded-[100%] blur-sm"></div>
+                <div className="absolute bottom-12 left-8 w-64 h-16 bg-black/20 rounded-[100%] blur-sm"></div>
 
                 {/* --- ENEMY STATUS BOX (Top Left) --- */}
                 <div className="absolute top-4 left-4 pk-status-box w-56 md:w-64 z-10">
@@ -99,20 +102,20 @@ export const PlayingScreen: React.FC = () => {
                 </div>
 
                 {/* --- ENEMY SPRITE (Top Right) --- */}
-                <div className="absolute top-12 right-8 md:top-8 md:right-16 z-0">
+                <div className="absolute top-6 right-2 md:top-8 md:right-16 z-0">
                     <img
-                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${currentLevel * 10}.png`}
+                        src={`/sprites/bug_${currentLevel}.png`}
                         alt="Enemy Bug"
-                        className={`w-32 h-32 md:w-48 md:h-48 pixel-art drop-shadow-lg transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-bounce'}`}
+                        className={`w-36 h-36 md:w-56 md:h-56 pixel-art drop-shadow-lg transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-bounce'}`}
                     />
                 </div>
 
                 {/* --- PLAYER SPRITE (Bottom Left) --- */}
-                <div className="absolute bottom-8 left-4 md:bottom-4 md:left-12 z-10">
+                <div className="absolute bottom-4 left-0 md:bottom-0 md:left-8 z-10">
                     <img
-                        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/214.png"
+                        src="/sprites/ant_player.png"
                         alt="Player Ant"
-                        className="w-40 h-40 md:w-64 md:h-64 pixel-art drop-shadow-xl opacity-90"
+                        className="w-48 h-48 md:w-72 md:h-72 pixel-art drop-shadow-xl"
                     />
                 </div>
 
