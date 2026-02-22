@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { GAME_QUESTIONS } from '../data/questions';
-import { Heart, Clock, Bug, ShieldAlert } from 'lucide-react';
+import { Heart } from 'lucide-react';
 
 const MAX_TIME_MS = 15000;
 
@@ -10,17 +10,14 @@ export const PlayingScreen: React.FC = () => {
     const currentQ = GAME_QUESTIONS[currentLevel - 1];
 
     const [timeLeft, setTimeLeft] = useState(MAX_TIME_MS);
-    const [selectedOption, setSelectedOption] = useState<number | null>(null);
     const [feedback, setFeedback] = useState<{ isCorrect: boolean; message: string } | null>(null);
 
     const startTimeRef = useRef<number>(Date.now());
     const timerRef = useRef<number | null>(null);
 
     useEffect(() => {
-        // Start or restart the level timer
         startTimeRef.current = Date.now();
         setTimeLeft(MAX_TIME_MS);
-        setSelectedOption(null);
         setFeedback(null);
 
         const updateTimer = () => {
@@ -48,17 +45,16 @@ export const PlayingScreen: React.FC = () => {
 
     const handleTimeOut = () => {
         stopTimer();
-        setFeedback({ isCorrect: false, message: 'TIME OVER! BUG ATACO (-1 HP)' });
+        setFeedback({ isCorrect: false, message: '¡El tiempo se ha agotado!' });
         setTimeout(() => {
             answerQuestion(false, MAX_TIME_MS);
-        }, 3000);
+        }, 2500);
     };
 
     const handleOptionClick = (index: number) => {
         if (feedback !== null) return;
 
         stopTimer();
-        setSelectedOption(index);
 
         const timeTakenMs = Date.now() - startTimeRef.current;
         const isCorrect = index === currentQ.correctOptionIndex;
@@ -70,115 +66,116 @@ export const PlayingScreen: React.FC = () => {
 
         setTimeout(() => {
             answerQuestion(isCorrect, timeTakenMs);
-        }, 3000);
+        }, 2500);
     };
 
-    const timePercentage = (timeLeft / MAX_TIME_MS) * 100;
-    const isDangerTime = timeLeft < 5000;
+    const timePercentage = Math.max(0, (timeLeft / MAX_TIME_MS) * 100);
+    const hpColor = timePercentage > 50 ? 'bg-[#48d0b0]' : timePercentage > 20 ? 'bg-[#f8d030]' : 'bg-[#f86048]';
 
     return (
-        <div className="flex flex-col min-h-screen p-2 md:p-4 max-w-4xl mx-auto w-full font-sans">
+        <div className="w-full h-screen max-w-lg md:max-w-4xl mx-auto flex flex-col font-sans select-none">
 
-            {/* HUD (Top Bar) */}
-            <header className="flex justify-between items-center bg-gb-darkest text-gb-lightest p-3 md:p-4 rounded-t shadow-md mb-4 border-4 border-gb-darkest">
-                <div className="flex flex-col text-left">
-                    <span className="text-[10px] md:text-sm uppercase tracking-widest">{username}</span>
-                    <span className="text-sm md:text-xl font-bold mt-1 tracking-widest">LVL {currentLevel}</span>
+            {/* 65% BATTLE ARENA */}
+            <div className="relative w-full h-[65vh] bg-[#d0f8d0] overflow-hidden">
+                {/* Arena Background circles/ellipses (Optional decorative to ground sprites) */}
+                <div className="absolute top-20 right-8 w-48 h-12 bg-green-300 rounded-[100%] opacity-50"></div>
+                <div className="absolute bottom-12 left-8 w-64 h-16 bg-green-300 rounded-[100%] opacity-50"></div>
+
+                {/* --- ENEMY STATUS BOX (Top Left) --- */}
+                <div className="absolute top-4 left-4 pk-status-box w-56 md:w-64 z-10">
+                    <div className="flex justify-between items-end mb-1">
+                        <h2 className="text-xs md:text-sm font-bold uppercase tracking-tighter truncate pr-2">
+                            {currentQ.enemyName}
+                        </h2>
+                        <span className="text-[10px] md:text-xs">Lv{currentLevel}</span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-[#484048] p-1 rounded-full border-2 border-[#506860]">
+                        <span className="text-[8px] text-yellow-500 font-bold ml-1">HP</span>
+                        <div className="flex-1 h-2 md:h-3 bg-gray-700 rounded-full overflow-hidden">
+                            <div
+                                className={`h-full transition-all duration-75 ${hpColor}`}
+                                style={{ width: `${timePercentage}%` }}
+                            ></div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-4 md:gap-8">
-                    <div className="flex flex-col items-center">
-                        <span className="text-[8px] md:text-[10px] mb-1">HP</span>
-                        <div className="flex gap-1">
-                            {[...Array(3)].map((_, i) => (
-                                <Heart
-                                    key={i}
-                                    className={`w-4 h-4 md:w-6 md:h-6 ${i < lives ? 'fill-gb-lightest' : 'fill-gb-dark opacity-50'}`}
-                                />
+                {/* --- ENEMY SPRITE (Top Right) --- */}
+                <div className="absolute top-12 right-8 md:top-8 md:right-16 z-0">
+                    <img
+                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${currentLevel * 10}.png`}
+                        alt="Enemy Bug"
+                        className={`w-32 h-32 md:w-48 md:h-48 pixel-art drop-shadow-lg transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-bounce'}`}
+                    />
+                </div>
+
+                {/* --- PLAYER SPRITE (Bottom Left) --- */}
+                <div className="absolute bottom-8 left-4 md:bottom-4 md:left-12 z-10">
+                    <img
+                        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/214.png"
+                        alt="Player Ant"
+                        className="w-40 h-40 md:w-64 md:h-64 pixel-art drop-shadow-xl opacity-90"
+                    />
+                </div>
+
+                {/* --- PLAYER STATUS BOX (Bottom Right, just above panel) --- */}
+                <div className="absolute bottom-4 right-4 pk-status-box w-56 md:w-64 z-20 shadow-xl">
+                    <div className="flex justify-between items-end mb-1">
+                        <h2 className="text-xs md:text-sm font-bold uppercase tracking-tighter truncate pr-2">
+                            {username}
+                        </h2>
+                        <span className="text-[10px] md:text-xs">Lv99</span>
+                    </div>
+                    <div className="flex items-center gap-1 mb-1 bg-[#484048] p-1 rounded-full border-2 border-[#506860] px-2 justify-end">
+                        {[...Array(3)].map((_, i) => (
+                            <Heart
+                                key={i}
+                                className={`w-4 h-4 md:w-5 md:h-5 ${i < lives ? 'fill-[#f86048] text-[#f86048]' : 'fill-gray-600 text-gray-600'}`}
+                            />
+                        ))}
+                    </div>
+                    <div className="text-right text-[10px] md:text-xs text-gray-600 font-bold">
+                        PTS: {score.toString().padStart(4, '0')}
+                    </div>
+                </div>
+            </div>
+
+            {/* 35% ACTION PANEL (Dialogue & Buttons) */}
+            <div className="w-full h-[35vh] pk-dialogue-box p-4 md:p-6 flex flex-col z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.2)]">
+
+                {feedback ? (
+                    // BATTLE TEXT FEEDBACK
+                    <div className="flex-1 flex items-center justify-center p-4">
+                        <p className="text-sm md:text-lg leading-loose uppercase animate-pulse text-center">
+                            {feedback.message}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="flex flex-col h-full gap-4">
+                        {/* QUESTION TEXT */}
+                        <div className="flex-1 border-b-2 border-gray-300 pb-2">
+                            <p className="text-[10px] md:text-sm leading-relaxed uppercase">
+                                {currentQ.question}
+                            </p>
+                        </div>
+
+                        {/* GRID 2x2 BUTTONS */}
+                        <div className="grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 h-1/2">
+                            {currentQ.options.map((option, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleOptionClick(index)}
+                                    className="pk-button rounded border-2 border-transparent hover:border-[#d05068] text-[9px] md:text-xs text-left px-2 uppercase shadow-sm flex items-center"
+                                >
+                                    <span className="text-[#d05068] font-bold mr-2 text-[12px]">{">"}</span>
+                                    {option}
+                                </button>
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col items-end">
-                        <span className="text-[8px] md:text-[10px] mb-1">SCORE</span>
-                        <span className="text-sm md:text-xl font-bold">
-                            {score.toString().padStart(5, '0')}
-                        </span>
-                    </div>
-                </div>
-            </header>
-
-            {/* COMBAT ARENA */}
-            <div className="gb-dialogue flex flex-col items-center mb-6 py-8">
-                <Bug className={`w-16 h-16 md:w-24 md:h-24 mb-4 transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-pulse'}`} />
-                <h2 className="text-lg md:text-2xl font-bold mb-6 text-center tracking-widest">
-                    {currentQ.enemyName}
-                </h2>
-
-                {/* TIMER BAR */}
-                <div className="w-full max-w-md gb-border h-6 bg-gb-lightest relative overflow-hidden flex items-center p-1">
-                    <div
-                        className={`h-full transition-all duration-75 ${isDangerTime ? 'bg-gb-darkest animate-pulse' : 'bg-gb-dark'}`}
-                        style={{ width: `${timePercentage}%` }}
-                    ></div>
-                </div>
-                <div className="flex items-center mt-2 text-xs md:text-sm gap-2 font-bold">
-                    <Clock className="w-4 h-4" />
-                    <span>{(timeLeft / 1000).toFixed(1)}s</span>
-                </div>
+                )}
             </div>
 
-            {/* RPG DIALOGUE BOX (QUESTION) */}
-            <div className="gb-dialogue mb-4 relative min-h-[120px] flex items-start">
-                <div className="absolute -top-3 -left-3 bg-gb-darkest text-gb-lightest p-2 rounded-full border-2 border-gb-lightest">
-                    <ShieldAlert className="w-5 h-5" />
-                </div>
-                <p className="text-xs md:text-base leading-relaxed text-left pt-2 ml-4">
-                    <span className="font-bold mr-2">{">"}</span>{currentQ.question}
-                </p>
-            </div>
-
-            {/* COMMAND MENU (OPTIONS) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-auto">
-                {currentQ.options.map((option, index) => {
-                    let extraClass = "";
-
-                    if (feedback) {
-                        if (index === currentQ.correctOptionIndex) {
-                            extraClass = "bg-gb-dark text-gb-lightest border-gb-darkest animate-pulse";
-                        } else if (index === selectedOption) {
-                            extraClass = "bg-gb-darkest text-gb-lightest line-through opacity-80";
-                        } else {
-                            extraClass = "opacity-30";
-                        }
-                    }
-
-                    return (
-                        <button
-                            key={index}
-                            disabled={feedback !== null}
-                            onClick={() => handleOptionClick(index)}
-                            className={`gb-button p-4 text-xs md:text-sm text-left flex items-start ${extraClass}`}
-                        >
-                            <span className="mr-3 font-bold opacity-70">[{index + 1}]</span>
-                            <span className="leading-relaxed">{option}</span>
-                        </button>
-                    );
-                })}
-            </div>
-
-            {/* RPG BATTLE TEXT OVERLAY */}
-            {feedback && (
-                <div className="fixed inset-0 pointer-events-none flex items-center justify-center z-50 bg-gb-darkest/80">
-                    <div className={`gb-dialogue animate-bounce max-w-lg mx-4`}>
-                        <span className="text-xl md:text-2xl font-bold uppercase leading-relaxed text-center block mb-4 border-b-4 border-gb-darkest pb-4">
-                            {feedback.isCorrect ? '¡HIT EFECTIVO!' : '¡ATAQUE RECIBIDO!'}
-                        </span>
-                        <span className="text-xs md:text-sm block text-center leading-relaxed">
-                            {feedback.message}
-                        </span>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

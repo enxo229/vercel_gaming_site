@@ -9,7 +9,7 @@ function App() {
   const { screen } = useGameStore();
 
   return (
-    <div className="gb-screen min-h-screen text-gb-darkest font-sans w-full max-w-lg mx-auto md:max-w-4xl shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen text-pk-text font-sans w-full max-w-lg mx-auto md:max-w-4xl shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
       {screen === 'START_SCREEN' && <StartScreen />}
       {screen === 'PLAYING' && <PlayingScreen />}
       {screen === 'GAME_OVER' && <GameOverScreen />}
