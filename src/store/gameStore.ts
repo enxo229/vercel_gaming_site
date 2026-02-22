@@ -1,0 +1,101 @@
+import { create } from 'zustand';
+
+export type GameScreen = 'START_SCREEN' | 'PLAYING' | 'GAME_OVER' | 'VICTORY' | 'LEADERBOARD';
+
+interface GameState {
+    screen: GameScreen;
+    username: string;
+    score: number;
+    lives: number;
+    currentLevel: number;
+
+    setUsername: (name: string) => void;
+    startGame: () => void;
+    answerQuestion: (isCorrect: boolean, timeTakenMs: number) => void;
+    setScreen: (screen: GameScreen) => void;
+    resetGame: () => void;
+    goToLeaderboard: () => void;
+    submitScore: () => Promise<void>;
+}
+
+const MAX_LEVELS = 10;
+const MAX_TIME_MS = 15000;
+const BASE_SCORE = 100;
+
+export const useGameStore = create<GameState>((set, get) => ({
+    screen: 'START_SCREEN',
+    username: '',
+    score: 0,
+    lives: 3,
+    currentLevel: 1,
+
+    setUsername: (name: string) => set({ username: name }),
+
+    startGame: () => set({
+        screen: 'PLAYING',
+        score: 0,
+        lives: 3,
+        currentLevel: 1
+    }),
+
+    setScreen: (screen: GameScreen) => set({ screen }),
+
+    answerQuestion: (isCorrect: boolean, timeTakenMs: number) => {
+        const state = get();
+
+        // Calcula la puntuación si es correcto
+        let levelScore = 0;
+        if (isCorrect && timeTakenMs < MAX_TIME_MS) {
+            const timeBonus = Math.floor(((MAX_TIME_MS - timeTakenMs) / MAX_TIME_MS) * 200);
+            levelScore = BASE_SCORE + timeBonus;
+        }
+
+        const newLives = isCorrect ? state.lives : state.lives - 1;
+        const newScore = state.score + levelScore;
+
+        // Lógica para avanzar al siguiente nivel o terminar
+        // Si llegamos a <= 0 vidas => Game Over inmediato.
+        if (newLives <= 0) {
+            set({ lives: 0, score: newScore, screen: 'GAME_OVER' });
+            return;
+        }
+
+        // Si pasamos el último nivel y no hemos muerto => Victoria
+        if (state.currentLevel >= MAX_LEVELS) {
+            set({ lives: newLives, score: newScore, screen: 'VICTORY' });
+        } else {
+            // Avanzar al siguiente nivel
+            set({
+                lives: newLives,
+                score: newScore,
+                currentLevel: state.currentLevel + 1
+            });
+        }
+    },
+
+    resetGame: () => set({
+        screen: 'START_SCREEN',
+        score: 0,
+        lives: 3,
+        currentLevel: 1,
+        username: ''
+    }),
+
+    goToLeaderboard: () => set({ screen: 'LEADERBOARD' }),
+
+    submitScore: async () => {
+        const { username, score } = get();
+        if (score === 0 || !username) return;
+
+        try {
+            const { supabase } = await import('../lib/supabase');
+            const { error } = await supabase.from('leaderboard').insert([{ username, score }]);
+
+            if (error) {
+                console.error('Error enviando puntuación:', error);
+            }
+        } catch (err) {
+            console.error('Error de red enviando score:', err);
+        }
+    }
+}));
