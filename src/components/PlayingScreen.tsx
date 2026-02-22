@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { GAME_QUESTIONS } from '../data/questions';
 import { Heart } from 'lucide-react';
-
-const MAX_TIME_MS = 15000;
-
+const MAX_TIME_MS = 20000;
 export const PlayingScreen: React.FC = () => {
     const { lives, score, currentLevel, username, answerQuestion } = useGameStore();
     const currentQ = GAME_QUESTIONS[currentLevel - 1];
@@ -126,16 +124,21 @@ export const PlayingScreen: React.FC = () => {
                         </h2>
                         <span className="text-[10px] md:text-xs">Lv99</span>
                     </div>
-                    <div className="flex items-center gap-1 mb-1 bg-[#484048] p-1 rounded-full border-2 border-[#506860] px-2 justify-end">
-                        {[...Array(3)].map((_, i) => (
-                            <Heart
-                                key={i}
-                                className={`w-4 h-4 md:w-5 md:h-5 ${i < lives ? 'fill-[#f86048] text-[#f86048]' : 'fill-gray-600 text-gray-600'}`}
-                            />
-                        ))}
+                    <div className="flex justify-between items-center gap-1 mb-1 mt-1">
+                        <div className="flex-1 bg-[#484048] p-1 rounded-full border-2 border-[#506860] flex items-center gap-1 px-2 justify-end">
+                            {[...Array(3)].map((_, i) => (
+                                <Heart
+                                    key={i}
+                                    className={`w-3 h-3 md:w-4 md:h-4 ${i < lives ? 'fill-[#f86048] text-[#f86048]' : 'fill-gray-600 text-gray-600'}`}
+                                />
+                            ))}
+                        </div>
                     </div>
-                    <div className="text-right text-[10px] md:text-xs text-gray-600 font-bold">
-                        PTS: {score.toString().padStart(4, '0')}
+                    <div className="flex justify-between items-center text-[9px] md:text-[10px] text-gray-600 font-bold mt-1 px-1">
+                        <span className={`${timePercentage < 25 ? 'text-red-500 animate-pulse' : ''}`}>
+                            T: {(timeLeft / 1000).toFixed(1)}s
+                        </span>
+                        <span>PTS: {score.toString().padStart(4, '0')}</span>
                     </div>
                 </div>
             </div>

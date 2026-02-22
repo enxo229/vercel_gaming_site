@@ -19,7 +19,7 @@ interface GameState {
 }
 
 const MAX_LEVELS = 10;
-const MAX_TIME_MS = 15000;
+const MAX_TIME_MS = 20000;
 const BASE_SCORE = 100;
 
 export const useGameStore = create<GameState>((set, get) => ({
