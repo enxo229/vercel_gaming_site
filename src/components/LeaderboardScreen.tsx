@@ -30,7 +30,7 @@ export const LeaderboardScreen: React.FC = () => {
                 setEntries(data || []);
             } catch (err: any) {
                 console.error('Error fetching leaderboard:', err);
-                setError('No se pudo cargar el Leaderboard. ¿Conectaste Supabase?');
+                setError('NETWORK ERROR');
             } finally {
                 setLoading(false);
             }
@@ -40,55 +40,54 @@ export const LeaderboardScreen: React.FC = () => {
     }, []);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-4 max-w-2xl mx-auto w-full">
-            <div className="bg-gray-800 p-8 border-4 border-blue-500 rounded-lg shadow-lg w-full">
-                <div className="flex justify-center mb-6">
-                    <ListOrdered className="w-16 h-16 text-blue-400" />
+        <div className="flex flex-col items-center justify-center min-h-screen p-2 md:p-4 max-w-2xl mx-auto w-full">
+            <div className="gb-dialogue w-full p-4 md:p-8">
+                <div className="flex justify-center mb-4">
+                    <ListOrdered className="w-12 h-12 md:w-16 md:h-16 text-gb-darkest" />
                 </div>
-                <h1 className="text-3xl font-bold text-blue-400 mb-8 text-center">TOP DEPURADORES</h1>
+                <h1 className="text-xl md:text-3xl font-bold mb-8 text-center uppercase tracking-widest border-b-4 border-gb-darkest pb-4">TOP SREs</h1>
 
                 {loading ? (
                     <div className="flex justify-center my-12">
-                        <Loader2 className="w-12 h-12 text-blue-500 animate-spin" />
+                        <Loader2 className="w-10 h-10 md:w-12 md:h-12 animate-spin text-gb-darkest" />
                     </div>
                 ) : error ? (
-                    <div className="bg-red-900/50 p-4 border border-red-500 text-red-200 text-center font-mono my-8">
+                    <div className="bg-gb-dark text-gb-lightest p-4 gb-border text-center my-8 text-xs">
                         {error}
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-2 mb-8 font-mono">
+                    <div className="flex flex-col gap-2 mb-8 text-[10px] md:text-xs">
                         {entries.length === 0 ? (
-                            <p className="text-center text-gray-400">Puntajes no encontrados.</p>
+                            <p className="text-center">Aún no hay registros.</p>
                         ) : (
                             entries.map((entry, idx) => (
                                 <div
                                     key={idx}
-                                    className={`flex justify-between items-center p-3 rounded border-b border-gray-700 
-                  ${entry.username === username ? 'bg-blue-900/40 border-l-4 border-l-blue-400' : 'bg-gray-900'}`}
+                                    className={`flex justify-between items-center p-3 border-b-2 border-gb-darkest 
+                  ${entry.username === username ? 'bg-gb-darkest text-gb-lightest' : 'bg-transparent text-gb-darkest'}`}
                                 >
-                                    <div className="flex items-center gap-4">
-                                        <span className={`font-bold w-6 text-right ${idx < 3 ? 'text-yellow-400' : 'text-gray-500'}`}>
+                                    <div className="flex items-center gap-3">
+                                        <span className="font-bold w-4 md:w-6 text-right">
                                             {idx + 1}.
                                         </span>
-                                        <span className={entry.username === username ? 'text-white' : 'text-gray-300'}>
-                                            {entry.username}
-                                            {entry.username === username && ' (Tú)'}
+                                        <span className="truncate max-w-[100px] md:max-w-none">
+                                            {entry.username.toUpperCase()}
                                         </span>
                                     </div>
-                                    <span className="text-green-400 font-bold">{entry.score} pts</span>
+                                    <span className="font-bold">{entry.score.toString().padStart(5, '0')}</span>
                                 </div>
                             ))
                         )}
                     </div>
                 )}
 
-                <div className="flex justify-center">
+                <div className="flex justify-center mt-8">
                     <button
                         onClick={resetGame}
-                        className="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded transition-colors"
+                        className="gb-button flex items-center justify-center gap-2 py-4 px-6 w-full text-xs font-bold"
                     >
-                        <Home className="w-5 h-5" />
-                        MENÚ PRINCIPAL
+                        <Home className="w-4 h-4" />
+                        INICIO
                     </button>
                 </div>
             </div>

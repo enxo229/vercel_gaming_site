@@ -9,37 +9,42 @@ export const VictoryScreen: React.FC = () => {
     useEffect(() => {
         if (!submitted.current) {
             submitted.current = true;
-            submitScore(); // Enviar puntos automáticamente al ganar
+            submitScore();
         }
     }, [submitScore]);
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-            <div className="bg-gray-800 p-8 border-4 border-yellow-500 rounded-lg shadow-[0_0_40px_rgba(234,179,8,0.5)] max-w-md w-full">
-                <Trophy className="w-24 h-24 text-yellow-400 mx-auto mb-6 animate-bounce" />
-                <h1 className="text-4xl font-bold text-yellow-400 mb-2">¡SISTEMA ESTABLE!</h1>
-                <p className="text-gray-300 mb-6 font-mono text-sm leading-relaxed">
-                    Excelente trabajo, <span className="text-green-400 font-bold">{username}</span>. Has erradicado todos los bugs de observabilidad y logrado {lives} vidas restantes.
-                </p>
+        <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center w-full">
+            <div className="gb-dialogue max-w-md w-full border-8">
+                <Trophy className="w-20 h-20 text-gb-darkest mx-auto mb-6 animate-bounce" />
+                <h1 className="text-2xl md:text-3xl font-bold mb-4 leading-relaxed">SISTEMA<br />ESTABLE</h1>
 
-                <div className="bg-gray-900 border-2 border-yellow-600/50 p-4 mb-8">
-                    <p className="text-sm text-gray-400">PUNTAJE FINAL</p>
-                    <p className="text-4xl font-bold text-yellow-400">{score}</p>
+                <div className="border-y-4 border-gb-darkest py-4 mb-6">
+                    <p className="text-xs leading-relaxed">
+                        EXCELENTE, {username}.<br />
+                        SRE MISSION CLEAR.<br />
+                        HP RESTANTE: {lives}
+                    </p>
+                </div>
+
+                <div className="bg-gb-darkest text-gb-lightest gb-border p-4 mb-8">
+                    <p className="text-[10px] mb-2">PUNTAJE FINAL</p>
+                    <p className="text-3xl font-bold">{score.toString().padStart(5, '0')}</p>
                 </div>
 
                 <div className="flex flex-col gap-4">
                     <button
                         onClick={goToLeaderboard}
-                        className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded uppercase transition-colors"
+                        className="gb-button py-4 font-bold text-xs bg-gb-lightest"
                     >
-                        Ver Leaderboard
+                        VER RANKING
                     </button>
 
                     <button
                         onClick={resetGame}
-                        className="bg-gray-700 hover:bg-gray-600 text-green-400 font-bold py-3 px-6 rounded uppercase transition-colors"
+                        className="gb-button py-4 font-bold text-xs bg-gb-dark text-gb-lightest hover:bg-gb-light"
                     >
-                        INICIAR NUEVA ASIGNACIÓN
+                        NUEVA MISIÓN
                     </button>
                 </div>
             </div>

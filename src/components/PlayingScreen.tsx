@@ -40,7 +40,7 @@ export const PlayingScreen: React.FC = () => {
         return () => {
             if (timerRef.current) cancelAnimationFrame(timerRef.current);
         };
-    }, [currentLevel]); // Re-run effect when level changes
+    }, [currentLevel]);
 
     const stopTimer = () => {
         if (timerRef.current) cancelAnimationFrame(timerRef.current);
@@ -48,14 +48,14 @@ export const PlayingScreen: React.FC = () => {
 
     const handleTimeOut = () => {
         stopTimer();
-        setFeedback({ isCorrect: false, message: '¡Tiempo agotado! El Bug ha atacado. (-1 Vida)' });
+        setFeedback({ isCorrect: false, message: 'TIME OVER! BUG ATACO (-1 HP)' });
         setTimeout(() => {
             answerQuestion(false, MAX_TIME_MS);
-        }, 2500);
+        }, 3000);
     };
 
     const handleOptionClick = (index: number) => {
-        if (feedback !== null) return; // Prevent multiple clicks
+        if (feedback !== null) return;
 
         stopTimer();
         setSelectedOption(index);
@@ -70,87 +70,85 @@ export const PlayingScreen: React.FC = () => {
 
         setTimeout(() => {
             answerQuestion(isCorrect, timeTakenMs);
-        }, 2500);
+        }, 3000);
     };
 
-    // UI calculations
     const timePercentage = (timeLeft / MAX_TIME_MS) * 100;
     const isDangerTime = timeLeft < 5000;
 
     return (
-        <div className="flex flex-col min-h-screen p-4 max-w-4xl mx-auto w-full">
-            {/* HEADER SECTION */}
-            <header className="flex justify-between items-center bg-gray-800 p-4 border-b-4 border-green-500 rounded-t-lg shadow-md mb-6">
+        <div className="flex flex-col min-h-screen p-2 md:p-4 max-w-4xl mx-auto w-full font-sans">
+
+            {/* HUD (Top Bar) */}
+            <header className="flex justify-between items-center bg-gb-darkest text-gb-lightest p-3 md:p-4 rounded-t shadow-md mb-4 border-4 border-gb-darkest">
                 <div className="flex flex-col text-left">
-                    <span className="text-green-400 text-sm uppercase">SRE: {username}</span>
-                    <span className="text-xl font-bold text-white mt-1">NIVEL {currentLevel}/10</span>
+                    <span className="text-[10px] md:text-sm uppercase tracking-widest">{username}</span>
+                    <span className="text-sm md:text-xl font-bold mt-1 tracking-widest">LVL {currentLevel}</span>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 md:gap-8">
                     <div className="flex flex-col items-center">
-                        <span className="text-[10px] text-gray-400 mb-1">VIDAS</span>
+                        <span className="text-[8px] md:text-[10px] mb-1">HP</span>
                         <div className="flex gap-1">
                             {[...Array(3)].map((_, i) => (
                                 <Heart
                                     key={i}
-                                    className={`w-6 h-6 ${i < lives ? 'text-red-500 fill-red-500' : 'text-gray-600'}`}
+                                    className={`w-4 h-4 md:w-6 md:h-6 ${i < lives ? 'fill-gb-lightest' : 'fill-gb-dark opacity-50'}`}
                                 />
                             ))}
                         </div>
                     </div>
                     <div className="flex flex-col items-end">
-                        <span className="text-[10px] text-gray-400 mb-1">PUNTAJE</span>
-                        <span className="text-xl font-bold text-yellow-400">
-                            {score.toString().padStart(4, '0')}
+                        <span className="text-[8px] md:text-[10px] mb-1">SCORE</span>
+                        <span className="text-sm md:text-xl font-bold">
+                            {score.toString().padStart(5, '0')}
                         </span>
                     </div>
                 </div>
             </header>
 
-            {/* ENEMY & TIMER SECTION */}
-            <div className="flex flex-col items-center mb-8 relative">
-                <div className="absolute inset-0 bg-red-900/10 blur-xl rounded-full"></div>
-                <Bug className={`w-20 h-20 mb-2 transition-colors ${feedback?.isCorrect ? 'text-gray-600' : 'text-red-500 animate-pulse'}`} />
-                <h2 className="text-2xl text-red-400 font-bold mb-6 text-center shadow-black drop-shadow-md z-10">
+            {/* COMBAT ARENA */}
+            <div className="gb-dialogue flex flex-col items-center mb-6 py-8">
+                <Bug className={`w-16 h-16 md:w-24 md:h-24 mb-4 transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-pulse'}`} />
+                <h2 className="text-lg md:text-2xl font-bold mb-6 text-center tracking-widest">
                     {currentQ.enemyName}
                 </h2>
 
-                <div className="w-full bg-gray-800 rounded-full h-4 border border-gray-600 overflow-hidden relative">
+                {/* TIMER BAR */}
+                <div className="w-full max-w-md gb-border h-6 bg-gb-lightest relative overflow-hidden flex items-center p-1">
                     <div
-                        className={`h-full transition-all duration-75 ${isDangerTime ? 'bg-red-500' : 'bg-green-500'}`}
+                        className={`h-full transition-all duration-75 ${isDangerTime ? 'bg-gb-darkest animate-pulse' : 'bg-gb-dark'}`}
                         style={{ width: `${timePercentage}%` }}
                     ></div>
                 </div>
-                <div className="flex items-center mt-2 text-sm text-gray-300 gap-2">
+                <div className="flex items-center mt-2 text-xs md:text-sm gap-2 font-bold">
                     <Clock className="w-4 h-4" />
-                    <span className={isDangerTime ? 'text-red-400 animate-pulse' : ''}>
-                        {(timeLeft / 1000).toFixed(1)}s
-                    </span>
+                    <span>{(timeLeft / 1000).toFixed(1)}s</span>
                 </div>
             </div>
 
-            {/* QUESTION SECTION */}
-            <div className="bg-gray-800 p-6 border-2 border-blue-500 rounded-lg shadow-lg mb-6 relative">
-                <div className="absolute -top-4 -left-4 bg-blue-500 text-white p-2 rounded-full z-10">
-                    <ShieldAlert className="w-6 h-6" />
+            {/* RPG DIALOGUE BOX (QUESTION) */}
+            <div className="gb-dialogue mb-4 relative min-h-[120px] flex items-start">
+                <div className="absolute -top-3 -left-3 bg-gb-darkest text-gb-lightest p-2 rounded-full border-2 border-gb-lightest">
+                    <ShieldAlert className="w-5 h-5" />
                 </div>
-                <p className="text-lg md:text-xl leading-relaxed text-blue-100 text-left pt-2 font-mono ml-4">
-                    {currentQ.question}
+                <p className="text-xs md:text-base leading-relaxed text-left pt-2 ml-4">
+                    <span className="font-bold mr-2">{">"}</span>{currentQ.question}
                 </p>
             </div>
 
-            {/* OPTIONS SECTION */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* COMMAND MENU (OPTIONS) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-auto">
                 {currentQ.options.map((option, index) => {
-                    let btnClass = "bg-gray-800 border-2 border-gray-600 text-gray-200 hover:border-green-400 hover:text-green-400";
+                    let extraClass = "";
 
                     if (feedback) {
                         if (index === currentQ.correctOptionIndex) {
-                            btnClass = "bg-green-900/50 border-2 border-green-500 text-green-300 animate-pulse";
+                            extraClass = "bg-gb-dark text-gb-lightest border-gb-darkest animate-pulse";
                         } else if (index === selectedOption) {
-                            btnClass = "bg-red-900/50 border-2 border-red-500 text-red-300 line-through";
+                            extraClass = "bg-gb-darkest text-gb-lightest line-through opacity-80";
                         } else {
-                            btnClass = "bg-gray-900 border-2 border-gray-800 text-gray-600 opacity-50";
+                            extraClass = "opacity-30";
                         }
                     }
 
@@ -159,24 +157,23 @@ export const PlayingScreen: React.FC = () => {
                             key={index}
                             disabled={feedback !== null}
                             onClick={() => handleOptionClick(index)}
-                            className={`p-4 rounded text-left flex items-start text-sm md:text-base font-mono transition-all ${btnClass}`}
+                            className={`gb-button p-4 text-xs md:text-sm text-left flex items-start ${extraClass}`}
                         >
-                            <span className="mr-3 font-bold opacity-50">[{index + 1}]</span>
-                            <span>{option}</span>
+                            <span className="mr-3 font-bold opacity-70">[{index + 1}]</span>
+                            <span className="leading-relaxed">{option}</span>
                         </button>
                     );
                 })}
             </div>
 
-            {/* FEEDBACK OVERLAY (Optional but good for visual impact) */}
+            {/* RPG BATTLE TEXT OVERLAY */}
             {feedback && (
-                <div className="fixed inset-0 pointer-events-none flex items-center justify-center z-50 bg-black/40 backdrop-blur-sm">
-                    <div className={`p-8 border-4 border-dashed bg-gray-900 shadow-2xl animate-bounce 
-            ${feedback.isCorrect ? 'border-green-500 text-green-400' : 'border-red-500 text-red-500'}`}>
-                        <span className="text-2xl font-bold uppercase leading-relaxed text-center block">
-                            {feedback.isCorrect ? '¡CORRECTO!' : '¡ATAQUE RECIBIDO!'}
+                <div className="fixed inset-0 pointer-events-none flex items-center justify-center z-50 bg-gb-darkest/80">
+                    <div className={`gb-dialogue animate-bounce max-w-lg mx-4`}>
+                        <span className="text-xl md:text-2xl font-bold uppercase leading-relaxed text-center block mb-4 border-b-4 border-gb-darkest pb-4">
+                            {feedback.isCorrect ? '¡HIT EFECTIVO!' : '¡ATAQUE RECIBIDO!'}
                         </span>
-                        <span className="text-sm mt-4 block max-w-sm text-center font-mono text-gray-300">
+                        <span className="text-xs md:text-sm block text-center leading-relaxed">
                             {feedback.message}
                         </span>
                     </div>

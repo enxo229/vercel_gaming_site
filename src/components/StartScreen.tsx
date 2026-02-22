@@ -9,7 +9,7 @@ export const StartScreen: React.FC = () => {
     const handleStart = (e: React.FormEvent) => {
         e.preventDefault();
         if (username.trim().length < 3) {
-            setError('El nombre debe tener al menos 3 caracteres.');
+            setError('Mínimo 3 letras!');
             return;
         }
         setError('');
@@ -17,40 +17,42 @@ export const StartScreen: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-4">
-            <div className="bg-gray-800 p-8 rounded-lg border-4 border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.5)] max-w-md w-full">
+        <div className="flex flex-col items-center justify-center min-h-screen p-4 w-full">
+            <div className="gb-dialogue max-w-md w-full text-center">
                 <div className="flex justify-center mb-6">
-                    <BugIcon className="w-16 h-16 text-green-400 animate-bounce" />
+                    <BugIcon className="w-16 h-16 animate-bounce" />
                 </div>
-                <h1 className="text-3xl font-bold text-green-400 mb-2 leading-tight">THE DEBUGGER ANT</h1>
-                <p className="text-xs text-green-200 mb-8 leading-relaxed">
-                    Embárcate en un viaje microscópico.<br />
-                    Combate los bugs de observabilidad<br />
-                    con tu conocimiento SRE.
-                </p>
+                <h1 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">THE DEBUGGER ANT</h1>
 
-                <form onSubmit={handleStart} className="flex flex-col gap-4">
-                    <div>
-                        <label htmlFor="username" className="block text-xs mb-2 text-left text-green-300">
-                            INGRESA TU NOMBRE:
+                <div className="border-t-4 border-b-4 border-gb-darkest py-4 mb-8 text-xs leading-relaxed">
+                    Embárcate en un viaje<br />
+                    microscópico. Combate<br />
+                    los bugs SRE.
+                </div>
+
+                <form onSubmit={handleStart} className="flex flex-col gap-6">
+                    <div className="text-left">
+                        <label htmlFor="username" className="block text-xs mb-3 text-gb-dark">
+                            &gt; INGRESA TU ALIAS:
                         </label>
                         <input
                             id="username"
                             type="text"
-                            className="w-full bg-gray-900 border-2 border-green-500 text-green-400 p-3 outline-none focus:border-white focus:ring-2 focus:ring-green-400 font-inherit"
+                            className="w-full bg-gb-lightest gb-border p-4 outline-none focus:bg-gb-light font-inherit uppercase"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Ej. SrDev"
+                            onChange={(e) => setUsername(e.target.value.toUpperCase())}
+                            placeholder="Ej. SRE_DEV"
                             autoComplete="off"
+                            maxLength={10}
                         />
-                        {error && <p className="text-red-400 text-xs mt-2 text-left">{error}</p>}
+                        {error && <p className="text-gb-darkest font-bold text-xs mt-3 bg-gb-light p-2 gb-border">{error}</p>}
                     </div>
 
                     <button
                         type="submit"
-                        className="mt-4 bg-green-500 hover:bg-green-400 text-gray-900 border-b-4 border-green-700 hover:border-green-600 active:border-b-0 active:translate-y-1 py-3 px-6 font-bold uppercase transition-all"
+                        className="gb-button py-4 px-6 text-sm font-bold uppercase mt-4"
                     >
-                        COMENZAR DEPURACIÓN
+                        START
                     </button>
                 </form>
             </div>
