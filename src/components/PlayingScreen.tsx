@@ -70,13 +70,19 @@ export const PlayingScreen: React.FC = () => {
     const timePercentage = Math.max(0, (timeLeft / MAX_TIME_MS) * 100);
     const hpColor = timePercentage > 50 ? 'bg-[#48d0b0]' : timePercentage > 20 ? 'bg-[#f8d030]' : 'bg-[#f86048]';
 
+    const getBackgroundImage = () => {
+        if (currentLevel >= 10) return '/sprites/final_background.png';
+        if (currentLevel >= 7) return '/sprites/background_7_8_9.png';
+        return '/sprites/background.png';
+    };
+
     return (
         <div className="w-full h-screen max-w-lg md:max-w-4xl mx-auto flex flex-col font-sans select-none">
 
             {/* 65% BATTLE ARENA */}
             <div
                 className="relative w-full h-[65vh] overflow-hidden bg-cover bg-bottom"
-                style={{ backgroundImage: 'url("/sprites/background.png")' }}
+                style={{ backgroundImage: `url("${getBackgroundImage()}")` }}
             >
                 {/* Arena Background circles/ellipses (Optional decorative to ground sprites) */}
                 <div className="absolute top-20 right-8 w-48 h-12 bg-black/20 rounded-[100%] blur-sm"></div>
