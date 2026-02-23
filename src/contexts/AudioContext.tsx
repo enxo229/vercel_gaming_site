@@ -29,15 +29,15 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     useEffect(() => {
         // Inicializar audios solo en el cliente
-        bgmRef.current = new Audio('/sfx/bgm.mp3');
+        bgmRef.current = new Audio('/sfx/bgm.wav');
         bgmRef.current.loop = true;
 
         sfxRefs.current = {
-            hit: new Audio('/sfx/hit.mp3'),
-            correct: new Audio('/sfx/correct.mp3'),
-            click: new Audio('/sfx/click.mp3'),
-            gameover: new Audio('/sfx/gameover.mp3'),
-            victory: new Audio('/sfx/victory.mp3')
+            hit: new Audio('/sfx/hit.wav'),
+            correct: new Audio('/sfx/correct.wav'),
+            click: new Audio('/sfx/click.wav'),
+            gameover: new Audio('/sfx/gameover.wav'),
+            victory: new Audio('/sfx/victory.wav')
         };
     }, []);
 
