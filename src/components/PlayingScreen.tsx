@@ -46,7 +46,7 @@ export const PlayingScreen: React.FC = () => {
         setFeedback({ isCorrect: false, message: '¡El tiempo se ha agotado!' });
         setTimeout(() => {
             answerQuestion(false, MAX_TIME_MS);
-        }, 2500);
+        }, 5500);
     };
 
     const handleOptionClick = (index: number) => {
@@ -64,7 +64,7 @@ export const PlayingScreen: React.FC = () => {
 
         setTimeout(() => {
             answerQuestion(isCorrect, timeTakenMs);
-        }, 2500);
+        }, 5500);
     };
 
     const timePercentage = Math.max(0, (timeLeft / MAX_TIME_MS) * 100);
@@ -153,26 +153,30 @@ export const PlayingScreen: React.FC = () => {
             </div>
 
             {/* 35% ACTION PANEL (Dialogue & Buttons) */}
-            <div className="w-full h-[35vh] pk-dialogue-box p-4 md:p-6 flex flex-col z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.2)]">
-                <div className="flex flex-col h-full gap-4">
+            <div className="w-full h-[35vh] bg-[#f8f0e3] border-t-[6px] border-[#2d1b00] p-4 md:p-6 flex flex-col z-30 shadow-[0_-8px_0px_#2d1b00] relative font-['Press_Start_2P']">
+
+                {/* Doble Borde dorado interno simulado */}
+                <div className="absolute inset-x-0 top-0 bottom-0 border-4 border-t-0 border-[#d4af37] pointer-events-none"></div>
+
+                <div className="flex flex-col h-full gap-4 relative z-10">
                     {/* QUESTION TEXT */}
-                    <div className="flex-1 border-b-2 border-gray-300 pb-2">
-                        <p className="text-[10px] md:text-sm leading-relaxed uppercase">
+                    <div className="flex-1 border-b-4 border-[#2d1b00] pb-2">
+                        <p className="text-[10px] md:text-xs leading-loose uppercase text-[#2d1b00]">
                             {currentQ.question}
                         </p>
                     </div>
 
                     {/* GRID 2x2 BUTTONS */}
-                    <div className="grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 h-1/2">
+                    <div className="grid grid-cols-2 grid-rows-2 gap-3 h-1/2">
                         {currentQ.options.map((option, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleOptionClick(index)}
                                 disabled={feedback !== null}
-                                className="pk-button rounded border-2 border-transparent hover:border-[#d05068] text-[9px] md:text-xs text-left px-2 uppercase shadow-sm flex items-center disabled:opacity-50 disabled:hover:border-transparent"
+                                className="bg-white border-4 border-[#2d1b00] text-[#2d1b00] hover:bg-gray-200 text-[8px] md:text-[10px] text-left px-3 uppercase flex items-center shadow-[4px_4px_0px_#2d1b00] disabled:opacity-50 disabled:shadow-[4px_4px_0px_#2d1b00] transition-transform active:translate-x-1 active:translate-y-1 active:shadow-[0px_0px_0px_#2d1b00]"
                             >
-                                <span className="text-[#d05068] font-bold mr-2 text-[12px]">{">"}</span>
-                                {option}
+                                <span className="text-[#d4af37] font-bold mr-2 text-[10px] drop-shadow-[1px_1px_0px_#2d1b00]">{">"}</span>
+                                <span className="truncate">{option}</span>
                             </button>
                         ))}
                     </div>
