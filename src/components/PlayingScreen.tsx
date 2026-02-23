@@ -108,11 +108,11 @@ export const PlayingScreen: React.FC = () => {
                 </div>
 
                 {/* --- ENEMY SPRITE (Top Right) --- */}
-                <div className="absolute top-6 right-2 md:top-8 md:right-16 z-0">
+                <div className="absolute top-2 right-0 md:top-4 md:right-12 z-0">
                     <img
                         src={`/sprites/bug_${currentLevel}.png`}
                         alt="Enemy Bug"
-                        className={`w-36 h-36 md:w-56 md:h-56 pixel-art drop-shadow-lg transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-bounce'}`}
+                        className={`w-52 h-52 md:w-72 md:h-72 pixel-art drop-shadow-2xl transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-bounce'}`}
                     />
                 </div>
 
@@ -154,40 +154,54 @@ export const PlayingScreen: React.FC = () => {
 
             {/* 35% ACTION PANEL (Dialogue & Buttons) */}
             <div className="w-full h-[35vh] pk-dialogue-box p-4 md:p-6 flex flex-col z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.2)]">
-
-                {feedback ? (
-                    // BATTLE TEXT FEEDBACK
-                    <div className="flex-1 flex items-center justify-center p-4">
-                        <p className="text-sm md:text-lg leading-loose uppercase animate-pulse text-center">
-                            {feedback.message}
+                <div className="flex flex-col h-full gap-4">
+                    {/* QUESTION TEXT */}
+                    <div className="flex-1 border-b-2 border-gray-300 pb-2">
+                        <p className="text-[10px] md:text-sm leading-relaxed uppercase">
+                            {currentQ.question}
                         </p>
                     </div>
-                ) : (
-                    <div className="flex flex-col h-full gap-4">
-                        {/* QUESTION TEXT */}
-                        <div className="flex-1 border-b-2 border-gray-300 pb-2">
-                            <p className="text-[10px] md:text-sm leading-relaxed uppercase">
-                                {currentQ.question}
-                            </p>
-                        </div>
 
-                        {/* GRID 2x2 BUTTONS */}
-                        <div className="grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 h-1/2">
-                            {currentQ.options.map((option, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => handleOptionClick(index)}
-                                    className="pk-button rounded border-2 border-transparent hover:border-[#d05068] text-[9px] md:text-xs text-left px-2 uppercase shadow-sm flex items-center"
-                                >
-                                    <span className="text-[#d05068] font-bold mr-2 text-[12px]">{">"}</span>
-                                    {option}
-                                </button>
-                            ))}
-                        </div>
+                    {/* GRID 2x2 BUTTONS */}
+                    <div className="grid grid-cols-2 grid-rows-2 gap-2 md:gap-4 h-1/2">
+                        {currentQ.options.map((option, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleOptionClick(index)}
+                                disabled={feedback !== null}
+                                className="pk-button rounded border-2 border-transparent hover:border-[#d05068] text-[9px] md:text-xs text-left px-2 uppercase shadow-sm flex items-center disabled:opacity-50 disabled:hover:border-transparent"
+                            >
+                                <span className="text-[#d05068] font-bold mr-2 text-[12px]">{">"}</span>
+                                {option}
+                            </button>
+                        ))}
                     </div>
-                )}
+                </div>
             </div>
 
+            {/* FEEDBACK MODAL (GBA RPG POP-UP) */}
+            {feedback && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+                    <div
+                        className={`bg-[#f8f0e3] border-[6px] p-6 max-w-lg w-full shadow-[8px_8px_0px_rgba(0,0,0,0.5)] animate-bounce relative
+                        ${feedback.isCorrect ? 'border-[#4ade80]' : 'border-[#ef4444]'}`}
+                    >
+                        {/* Inner Double Border */}
+                        <div className={`absolute inset-0 border-4 pointer-events-none ${feedback.isCorrect ? 'border-[#22c55e]' : 'border-[#dc2626]'}`}></div>
+
+                        <div className="flex flex-col items-center text-center relative z-10">
+                            <h2 className={`font-['Press_Start_2P'] text-lg md:text-xl mb-4 leading-loose
+                                ${feedback.isCorrect ? 'text-[#16a34a]' : 'text-[#dc2626]'}`}
+                            >
+                                {feedback.isCorrect ? '¡HIT EFECTIVO! ✔' : '¡ATAQUE RECIBIDO! ✖'}
+                            </h2>
+                            <p className="font-['Press_Start_2P'] text-[10px] md:text-xs text-[#2d1b00] leading-loose uppercase">
+                                {feedback.message}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
