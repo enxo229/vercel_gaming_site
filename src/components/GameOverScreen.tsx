@@ -31,14 +31,21 @@ export const GameOverScreen: React.FC = () => {
                     GAME OVER
                 </h1>
 
-                <div className="border-t-4 border-b-4 border-[#dc2626] py-4 mb-6">
-                    <p className="text-[10px] md:text-xs mb-2 leading-relaxed font-['Press_Start_2P'] text-gray-300">
-                        SISTEMA COLAPSADO<br />
-                        EN NIVEL {currentLevel}.
-                    </p>
-                    <p className="text-[8px] md:text-[10px] text-[#ef4444] font-bold mt-4 font-['Press_Start_2P'] animate-pulse">
-                        ALERTA P0 GENERADA.
-                    </p>
+                <div className="border-4 border-[#dc2626] bg-[#450a0a] p-4 mb-6 relative overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,0.8)]">
+                    {/* Barras diagonales de peligro de fondo animadas (opcional, estilizado) */}
+                    <div className="absolute inset-0 opacity-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#ef4444_10px,#ef4444_20px)] pointer-events-none"></div>
+
+                    <div className="relative z-10 flex flex-col items-center gap-2">
+                        <p className="text-[10px] md:text-xs leading-relaxed font-['Press_Start_2P'] text-[#fca5a5]">
+                            SISTEMA COLAPSADO EN NIVEL {currentLevel}
+                        </p>
+
+                        <div className="w-full h-1 bg-[#dc2626] my-2 shadow-[0_0_5px_#ef4444] animate-pulse"></div>
+
+                        <p className="text-[8px] md:text-[9px] text-white font-bold font-['Press_Start_2P'] animate-pulse leading-loose drop-shadow-[0_2px_2px_#000]">
+                            ⚠️ INCIDENTE CRÍTICO EN PROCESO, INICIAR WAR ROOM DE INMEDIATO ⚠️
+                        </p>
+                    </div>
                 </div>
 
                 <div className="bg-black text-[#f8f0e3] border-4 border-[#dc2626] p-4 mb-8">
