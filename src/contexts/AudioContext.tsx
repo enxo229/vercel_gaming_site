@@ -32,6 +32,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         // Inicializar audios solo en el cliente
         bgmRef.current = new Audio('/sfx/bgm.mp3');
         bgmRef.current.loop = true;
+        bgmRef.current.volume = 0.1; // Reducido a un 10% para que sea suave de fondo
 
         sfxRefs.current = {
             hit: new Audio('/sfx/hit.mp3'),
