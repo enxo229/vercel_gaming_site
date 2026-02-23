@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type GameScreen = 'START_SCREEN' | 'PLAYING' | 'GAME_OVER' | 'VICTORY' | 'LEADERBOARD';
+export type GameScreen = 'START_SCREEN' | 'INSTRUCTIONS' | 'PLAYING' | 'GAME_OVER' | 'VICTORY' | 'LEADERBOARD';
 
 interface GameState {
     screen: GameScreen;
@@ -11,6 +11,7 @@ interface GameState {
 
     setUsername: (name: string) => void;
     startGame: () => void;
+    startBattle: () => void;
     answerQuestion: (isCorrect: boolean, timeTakenMs: number) => void;
     setScreen: (screen: GameScreen) => void;
     resetGame: () => void;
@@ -32,11 +33,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     setUsername: (name: string) => set({ username: name }),
 
     startGame: () => set({
-        screen: 'PLAYING',
+        screen: 'INSTRUCTIONS',
         score: 0,
         lives: 3,
         currentLevel: 1
     }),
+
+    startBattle: () => set({ screen: 'PLAYING' }),
 
     setScreen: (screen: GameScreen) => set({ screen }),
 

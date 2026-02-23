@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from './store/gameStore';
 import { StartScreen } from './components/StartScreen';
+import { InstructionsScreen } from './components/InstructionsScreen';
 import { PlayingScreen } from './components/PlayingScreen';
 import { GameOverScreen } from './components/GameOverScreen';
 import { VictoryScreen } from './components/VictoryScreen';
@@ -45,6 +46,7 @@ function App() {
       <div className="min-h-screen text-pk-text font-sans w-full max-w-lg mx-auto md:max-w-4xl shadow-2xl relative overflow-hidden flex flex-col items-center justify-center">
         <MuteButton />
         {screen === 'START_SCREEN' && <StartScreen />}
+        {screen === 'INSTRUCTIONS' && <InstructionsScreen />}
         {screen === 'PLAYING' && <PlayingScreen />}
         {screen === 'GAME_OVER' && <GameOverScreen />}
         {screen === 'VICTORY' && <VictoryScreen />}

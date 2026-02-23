@@ -148,9 +148,9 @@ export const PlayingScreen: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                    <div className="flex justify-between items-center text-[9px] md:text-[10px] text-gray-600 font-bold mt-1 px-1">
-                        <span className={`${timePercentage < 25 ? 'text-red-500 animate-pulse' : ''}`}>
-                            T: {(timeLeft / 1000).toFixed(1)}s
+                    <div className="flex justify-between items-center text-[9px] md:text-[10px] text-gray-600 font-bold mt-2 px-1">
+                        <span className={`font-['Press_Start_2P'] text-xs md:text-sm drop-shadow-sm transition-colors ${timePercentage < 25 ? 'text-red-500 animate-pulse scale-110 origin-left drop-shadow-[1px_1px_0px_#000]' : 'text-[#2d1b00]'}`}>
+                            ⏳ {(timeLeft / 1000).toFixed(1)}s
                         </span>
                         <span>PTS: {score.toString().padStart(4, '0')}</span>
                     </div>
