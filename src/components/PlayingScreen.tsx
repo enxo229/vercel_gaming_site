@@ -89,7 +89,7 @@ export const PlayingScreen: React.FC = () => {
                 <div className="absolute bottom-12 left-8 w-64 h-16 bg-black/20 rounded-[100%] blur-sm"></div>
 
                 {/* --- ENEMY STATUS BOX (Top Left) --- */}
-                <div className="absolute top-4 left-4 pk-status-box w-56 md:w-64 z-10">
+                <div className="absolute top-4 left-4 pk-status-box w-80 md:w-96 z-10">
                     <div className="flex justify-between items-end mb-1">
                         <h2 className="text-xs md:text-sm font-bold uppercase tracking-tighter truncate pr-2">
                             {currentQ.enemyName}
@@ -126,7 +126,7 @@ export const PlayingScreen: React.FC = () => {
                 </div>
 
                 {/* --- PLAYER STATUS BOX (Bottom Right, just above panel) --- */}
-                <div className="absolute bottom-4 right-4 pk-status-box w-56 md:w-64 z-20 shadow-xl">
+                <div className="absolute bottom-4 right-4 pk-status-box w-80 md:w-96 z-20 shadow-xl">
                     <div className="flex justify-between items-end mb-1">
                         <h2 className="text-xs md:text-sm font-bold uppercase tracking-tighter truncate pr-2">
                             {username}
