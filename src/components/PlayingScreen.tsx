@@ -94,7 +94,7 @@ export const PlayingScreen: React.FC = () => {
                         <h2 className="text-xs md:text-sm font-bold uppercase tracking-tighter truncate pr-2">
                             {currentQ.enemyName}
                         </h2>
-                        <span className="text-[10px] md:text-xs">Lv{currentLevel}</span>
+                        <span className="text-[8px] md:text-[10px] font-['Press_Start_2P'] text-gray-500">Lv{currentLevel}</span>
                     </div>
                     <div className="flex items-center gap-2 bg-[#484048] p-1 rounded-full border-2 border-[#506860]">
                         <span className="text-[8px] text-yellow-500 font-bold ml-1">HP</span>
@@ -108,7 +108,7 @@ export const PlayingScreen: React.FC = () => {
                 </div>
 
                 {/* --- ENEMY SPRITE (Top Right) --- */}
-                <div className="absolute top-2 right-0 md:top-4 md:right-12 z-0">
+                <div className="absolute top-20 right-0 md:top-4 md:right-12 z-0">
                     <img
                         src={`/sprites/bug_${currentLevel}.png`}
                         alt="Enemy Bug"
@@ -117,7 +117,7 @@ export const PlayingScreen: React.FC = () => {
                 </div>
 
                 {/* --- PLAYER SPRITE (Bottom Left) --- */}
-                <div className="absolute bottom-4 left-0 md:bottom-0 md:left-8 z-10">
+                <div className="absolute bottom-20 left-0 md:bottom-0 md:left-8 z-10">
                     <img
                         src="/sprites/ant_player.png"
                         alt="Player Ant"
@@ -131,7 +131,7 @@ export const PlayingScreen: React.FC = () => {
                         <h2 className="text-xs md:text-sm font-bold uppercase tracking-tighter truncate pr-2">
                             {username}
                         </h2>
-                        <span className="text-[10px] md:text-xs">Lv99</span>
+                        <span className="text-[8px] md:text-[10px] font-['Press_Start_2P'] text-gray-500">Lv99</span>
                     </div>
                     <div className="flex justify-between items-center gap-1 mb-1 mt-1">
                         <div className="flex-1 bg-[#484048] p-1 rounded-full border-2 border-[#506860] flex items-center gap-1 px-2 justify-end">
