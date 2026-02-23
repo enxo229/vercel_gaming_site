@@ -72,7 +72,7 @@ export const PlayingScreen: React.FC = () => {
 
     const getBackgroundImage = () => {
         if (currentLevel >= 10) return '/sprites/final_background.png';
-        if (currentLevel >= 7) return '/sprites/background_7_8_9.png';
+        if (currentLevel >= 8) return '/sprites/background_7_8_9.png';
         return '/sprites/background.png';
     };
 
@@ -112,7 +112,7 @@ export const PlayingScreen: React.FC = () => {
                     <img
                         src={`/sprites/bug_${currentLevel}.png`}
                         alt="Enemy Bug"
-                        className={`w-52 h-52 md:w-72 md:h-72 pixel-art drop-shadow-2xl transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-bounce'}`}
+                        className={`w-64 h-64 md:w-80 md:h-80 pixel-art drop-shadow-2xl transition-transform ${feedback?.isCorrect ? 'opacity-20 translate-y-4' : 'animate-bounce'}`}
                     />
                 </div>
 
@@ -121,7 +121,7 @@ export const PlayingScreen: React.FC = () => {
                     <img
                         src="/sprites/ant_player.png"
                         alt="Player Ant"
-                        className="w-48 h-48 md:w-72 md:h-72 pixel-art drop-shadow-xl"
+                        className="w-56 h-56 md:w-80 md:h-80 pixel-art drop-shadow-xl"
                     />
                 </div>
 
