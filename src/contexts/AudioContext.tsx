@@ -8,6 +8,7 @@ interface AudioContextType {
     playBGM: () => void;
     stopBGM: () => void;
     playSFX: (type: SFXType) => void;
+    stopAllAudio: () => void;
 }
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -17,6 +18,9 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     // BGM Ref
     const bgmRef = useRef<HTMLAudioElement | null>(null);
+
+    // Active SFX Ref (To stop previous long sounds)
+    const activeSFXRef = useRef<HTMLAudioElement | null>(null);
 
     // SFX Refs mapping
     const sfxRefs = useRef<Record<SFXType, HTMLAudioElement | null>>({
@@ -52,6 +56,31 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         Object.values(sfxRefs.current).forEach(audio => {
             if (audio) audio.muted = isMuted;
         });
+        if (activeSFXRef.current) {
+            activeSFXRef.current.muted = isMuted;
+        }
+    }, [isMuted]);
+
+    // Pausar todo el audio si el usuario cambia de pestaña/aplicación
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                if (bgmRef.current && !bgmRef.current.paused) {
+                    bgmRef.current.pause();
+                }
+                if (activeSFXRef.current && !activeSFXRef.current.paused) {
+                    activeSFXRef.current.pause();
+                }
+            } else {
+                // Solo reanudamos si no está muteado explícitamente y SI estábamos en un estado que deba tener música (esto es un poco optimista, pero evita silencios)
+                if (bgmRef.current && !isMuted && window.location.pathname !== '/leaderboard') {
+                    // bgmRef.current.play().catch(e => console.warn(e)); // Podría fallar si requiere interacción nueva
+                }
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
     }, [isMuted]);
 
     const toggleMute = () => setIsMuted(prev => !prev);
@@ -69,21 +98,36 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
     };
 
+    const stopAllAudio = () => {
+        stopBGM();
+        if (activeSFXRef.current) {
+            activeSFXRef.current.pause();
+            activeSFXRef.current.currentTime = 0;
+            activeSFXRef.current = null;
+        }
+    }
+
     const playSFX = (type: SFXType) => {
         if (isMuted) return;
 
+        // Detener calquier SFX anterior que esté sonando (para evitar solapamientos largos como victory o gameover)
+        if (activeSFXRef.current) {
+            activeSFXRef.current.pause();
+            activeSFXRef.current.currentTime = 0;
+        }
+
         const audio = sfxRefs.current[type];
         if (audio) {
-            // Clonar y reproducir para permitir sonidos superpuestos rápidos
             const clone = audio.cloneNode() as HTMLAudioElement;
             clone.volume = audio.volume;
             clone.muted = isMuted;
+            activeSFXRef.current = clone; // Track active clone
             clone.play().catch(e => console.warn(`Error SFX ${type}:`, e));
         }
     };
 
     return (
-        <AudioContext.Provider value={{ isMuted, toggleMute, playBGM, stopBGM, playSFX }}>
+        <AudioContext.Provider value={{ isMuted, toggleMute, playBGM, stopBGM, playSFX, stopAllAudio }}>
             {children}
         </AudioContext.Provider>
     );
