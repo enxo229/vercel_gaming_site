@@ -6,8 +6,18 @@ export const InstructionsScreen: React.FC = () => {
     const { startBattle } = useGameStore();
     const { playSFX, playBGM } = useAudio();
 
-    const fullText = "Hola! soy la general Abril y tengo una misión para ti, a continuación enfrentarás a los enemigos más peligrosos de la resiliencia, la continuidad y la disponibilidad. Tienes solamente 20 segundos para responder correctamente las preguntas y vencer a cada uno. Recibirás puntos por responder bien y más puntos entre más rápido respondas. Recuerda que responder mal no te da puntos. Solo tienes tres vidas para proteger nuestros sistemas vitales, ¡Cuento contigo!";
-
+    const FullTextContent = () => (
+        <>
+            Hola! soy la general Abril y tengo una <span className="text-purple-600 drop-shadow-[1px_1px_0px_#fff]">misión</span> para ti,
+            a continuación enfrentarás a los enemigos más peligrosos de la <span className="text-blue-600 drop-shadow-[1px_1px_0px_#fff]">resiliencia</span>,
+            la <span className="text-green-600 drop-shadow-[1px_1px_0px_#fff]">continuidad</span> y la <span className="text-amber-600 drop-shadow-[1px_1px_0px_#fff]">disponibilidad</span>.
+            Tienes solamente <span className="text-red-600 animate-pulse drop-shadow-[1px_1px_0px_#fff]">20 segundos</span> para responder correctamente las preguntas y vencer a cada uno.
+            Recibirás puntos por responder bien y más puntos entre <span className="text-[#d4af37] drop-shadow-[1px_1px_0px_#000]">más rápido</span> respondas.
+            Recuerda que responder <span className="text-red-700 underline drop-shadow-[1px_1px_0px_#fff]">mal no te da puntos</span>.
+            Solo tienes <span className="text-pink-600 drop-shadow-[1px_1px_0px_#fff]">tres vidas</span> para proteger nuestros sistemas vitales,
+            <span className="text-[#d4af37] block mt-2 text-center animate-bounce drop-shadow-[1px_1px_0px_#000]">¡Cuento contigo!</span>
+        </>
+    );
     const handleContinue = () => {
         playSFX('click');
         playBGM();
@@ -40,9 +50,9 @@ export const InstructionsScreen: React.FC = () => {
                     </div>
 
                     <div className="flex-1 mt-2 overflow-y-auto custom-scrollbar pr-2 mb-4">
-                        <p className="text-[10px] md:text-xs leading-loose md:leading-loose text-[#2d1b00] break-words">
-                            {fullText}
-                        </p>
+                        <div className="text-[10px] md:text-xs leading-loose md:leading-loose text-[#2d1b00] break-words">
+                            <FullTextContent />
+                        </div>
                     </div>
 
                     <div className="flex justify-end mt-auto flex-shrink-0">
