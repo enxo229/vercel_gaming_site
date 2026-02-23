@@ -69,8 +69,8 @@ export const GAME_QUESTIONS: Question[] = [
     {
         id: 6,
         enemyName: "La Mariquita de la Fatiga",
-        question: "Cuál de las siguientes opciones describe mejor el concepto de 'Fatiga de Alertas'?",
-        options: ["Es cuando una alerta es cansona", "Cuando el alertamiento no es efectivo", "Es cuando las alertas no implican un accionable", "Es cuando me llama mi amá"],
+        question: "Cuál de las siguientes opciones describe mejor 'Fatiga de Alertas es...'?",
+        options: ["Una alerta es cansona", "Alertamiento no es efectivo", "Las alertas no son accionables", "Es cuando me llama mi amá"],
         correctOptionIndex: 2,
         feedback: {
             success: "Bien dicho! Las alertas que no implican un accionable son ruido.",
