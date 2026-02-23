@@ -36,7 +36,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
         sfxRefs.current = {
             hit: new Audio('/sfx/hit.mp3'),
-            correct: new Audio('/sfx/correct.wav'),
+            correct: new Audio('/sfx/correct.mp3'),
             click: new Audio('/sfx/click.wav'), // Kept as wav as fallback for UI clicks
             gameover: new Audio('/sfx/gameover.wav'),
             victory: new Audio('/sfx/win.mp3'),
