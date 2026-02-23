@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { supabase } from '../lib/supabase';
-import { ListOrdered, Loader2, Home } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface LeaderboardEntry {
     username: string;
@@ -9,28 +9,23 @@ interface LeaderboardEntry {
 }
 
 export const LeaderboardScreen: React.FC = () => {
-    const { resetGame, username } = useGameStore();
+    const { resetGame } = useGameStore();
     const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchScores = async () => {
             try {
-                const { data, error: sbError } = await supabase
+                const { data, error } = await supabase
                     .from('leaderboard')
                     .select('username, score')
                     .order('score', { ascending: false })
                     .limit(10);
 
-                if (sbError) {
-                    throw sbError;
-                }
-
+                if (error) throw error;
                 setEntries(data || []);
-            } catch (err: any) {
+            } catch (err) {
                 console.error('Error fetching leaderboard:', err);
-                setError('NETWORK ERROR');
             } finally {
                 setLoading(false);
             }
@@ -39,57 +34,72 @@ export const LeaderboardScreen: React.FC = () => {
         fetchScores();
     }, []);
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen p-2 md:p-4 max-w-2xl mx-auto w-full">
-            <div className="gb-dialogue w-full p-4 md:p-8">
-                <div className="flex justify-center mb-4">
-                    <ListOrdered className="w-12 h-12 md:w-16 md:h-16 text-gb-darkest" />
-                </div>
-                <h1 className="text-xl md:text-3xl font-bold mb-8 text-center uppercase tracking-widest border-b-4 border-gb-darkest pb-4">TOP SREs</h1>
+    const getRankColor = (index: number) => {
+        switch (index) {
+            case 0: return 'text-[#ffd700]'; // Oro
+            case 1: return 'text-[#c0c0c0]'; // Plata
+            case 2: return 'text-[#cd7f32]'; // Bronce
+            default: return 'text-[#2d1b00]';
+        }
+    };
 
-                {loading ? (
-                    <div className="flex justify-center my-12">
-                        <Loader2 className="w-10 h-10 md:w-12 md:h-12 animate-spin text-gb-darkest" />
-                    </div>
-                ) : error ? (
-                    <div className="bg-gb-dark text-gb-lightest p-4 gb-border text-center my-8 text-xs">
-                        {error}
-                    </div>
-                ) : (
-                    <div className="flex flex-col gap-2 mb-8 text-[10px] md:text-xs">
-                        {entries.length === 0 ? (
-                            <p className="text-center">Aún no hay registros.</p>
-                        ) : (
-                            entries.map((entry, idx) => (
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen w-full relative bg-[url('/sprites/hall_bg.png')] bg-cover bg-center font-['Press_Start_2P'] select-none p-4">
+            {/* Overlay Oscuro si la imagen es muy brillante */}
+            <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none"></div>
+
+            {/* Contenedor Principal (El Pergamino) */}
+            <div className="bg-[#f8f0e3] border-[6px] border-[#2d1b00] max-w-2xl w-full p-6 md:p-8 shadow-[6px_6px_0px_rgba(45,27,0,1)] relative z-10 flex flex-col h-[75vh]">
+
+                {/* Borde Interno Decorativo */}
+                <div className="absolute inset-0 border-4 border-[#d4af37] pointer-events-none"></div>
+
+                <h1 className="text-base md:text-xl text-[#d4af37] text-center drop-shadow-[2px_2px_0px_#2d1b00] mb-8 mt-2 uppercase">
+                    SALÓN DE LA FAMA SRE
+                </h1>
+
+                <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                    {loading ? (
+                        <div className="flex justify-center items-center h-full">
+                            <Loader2 className="w-8 h-8 md:w-12 md:h-12 text-[#2d1b00] animate-spin" />
+                        </div>
+                    ) : entries.length === 0 ? (
+                        <div className="flex justify-center items-center h-full">
+                            <p className="text-[#2d1b00] text-xs md:text-sm text-center">EL SALÓN ESTÁ VACÍO.</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col">
+                            {entries.map((entry, i) => (
                                 <div
-                                    key={idx}
-                                    className={`flex justify-between items-center p-3 border-b-2 border-gb-darkest 
-                  ${entry.username === username ? 'bg-gb-darkest text-gb-lightest' : 'bg-transparent text-gb-darkest'}`}
+                                    key={i}
+                                    className={`flex justify-between items-center border-b-[2px] border-dashed border-gray-400 py-4 ${getRankColor(i)}`}
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-bold w-4 md:w-6 text-right">
-                                            {idx + 1}.
+                                    <div className="flex items-center gap-3 md:gap-6 overflow-hidden">
+                                        <span className="text-[10px] md:text-xs">
+                                            {i + 1}.
                                         </span>
-                                        <span className="truncate max-w-[100px] md:max-w-none">
-                                            {entry.username.toUpperCase()}
+                                        <span className="text-[10px] md:text-xs truncate max-w-[120px] md:max-w-[200px]">
+                                            {entry.username}
                                         </span>
                                     </div>
-                                    <span className="font-bold">{entry.score.toString().padStart(5, '0')}</span>
+                                    <div className="text-[10px] md:text-xs">
+                                        {entry.score.toString().padStart(5, '0')}
+                                    </div>
                                 </div>
-                            ))
-                        )}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+                </div>
 
-                <div className="flex justify-center mt-8">
+                <div className="mt-8 flex justify-center">
                     <button
                         onClick={resetGame}
-                        className="gb-button flex items-center justify-center gap-2 py-4 px-6 w-full text-xs font-bold"
+                        className="bg-white border-4 border-[#2d1b00] py-3 px-6 md:py-4 md:px-8 text-[10px] md:text-xs text-[#2d1b00] uppercase shadow-[4px_4px_0px_#2d1b00] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_#2d1b00] transition-all active:bg-gray-200"
                     >
-                        <Home className="w-4 h-4" />
-                        INICIO
+                        VOLVER AL INICIO
                     </button>
                 </div>
+
             </div>
         </div>
     );

@@ -15,7 +15,7 @@ interface GameState {
     setScreen: (screen: GameScreen) => void;
     resetGame: () => void;
     goToLeaderboard: () => void;
-    submitScore: () => Promise<void>;
+    submitScore: () => Promise<'success' | 'offline' | 'error'>;
 }
 
 const MAX_LEVELS = 10;
@@ -85,7 +85,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     submitScore: async () => {
         const { username, score } = get();
-        if (score === 0 || !username) return;
+        if (score === 0 || !username) return 'error';
 
         try {
             const { supabase } = await import('../lib/supabase');
@@ -93,9 +93,16 @@ export const useGameStore = create<GameState>((set, get) => ({
 
             if (error) {
                 console.error('Error enviando puntuación:', error);
+                // Si falla la inserción por un error (p.ej. de red), guardar offline
+                localStorage.setItem('offline_pending_score', JSON.stringify({ username, score }));
+                return 'offline';
             }
+            return 'success';
         } catch (err) {
             console.error('Error de red enviando score:', err);
+            // Capturar la caída de red o timeout
+            localStorage.setItem('offline_pending_score', JSON.stringify({ username, score }));
+            return 'offline';
         }
     }
 }));

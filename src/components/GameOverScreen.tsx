@@ -1,15 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { Skull } from 'lucide-react';
 
 export const GameOverScreen: React.FC = () => {
     const { score, currentLevel, resetGame, goToLeaderboard, submitScore, username } = useGameStore();
     const submitted = useRef(false);
+    const [showOfflineAlert, setShowOfflineAlert] = useState(false);
 
     useEffect(() => {
         if (!submitted.current) {
             submitted.current = true;
-            submitScore();
+            submitScore().then(status => {
+                if (status === 'offline') setShowOfflineAlert(true);
+            });
         }
     }, [submitScore]);
 
@@ -59,6 +62,27 @@ export const GameOverScreen: React.FC = () => {
                     </button>
                 </div>
             </div>
+
+            {/* ALERTA DE MODO OFFLINE */}
+            {showOfflineAlert && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="bg-[#f8f0e3] border-[6px] border-[#dc2626] p-6 max-w-sm w-full text-center shadow-[8px_8px_0px_#000] relative">
+                        <div className="absolute inset-0 border-4 border-[#ef4444] pointer-events-none"></div>
+                        <h2 className="font-['Press_Start_2P'] text-[#dc2626] text-sm md:text-base mb-4 leading-loose relative z-10">
+                            ⚠️ CONEXIÓN PERDIDA
+                        </h2>
+                        <p className="font-['Press_Start_2P'] text-[8px] md:text-[10px] text-[#2d1b00] leading-loose relative z-10">
+                            Puntaje guardado en el dispositivo. No cierres la pestaña, se enviará cuando vuelvas a estar en línea.
+                        </p>
+                        <button
+                            onClick={() => setShowOfflineAlert(false)}
+                            className="mt-6 bg-white border-4 border-[#2d1b00] py-2 px-4 text-[10px] font-['Press_Start_2P'] text-[#2d1b00] uppercase shadow-[4px_4px_0px_#2d1b00] hover:translate-y-1 hover:translate-x-1 hover:shadow-none active:bg-gray-200 relative z-10"
+                        >
+                            ENTENDIDO
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
