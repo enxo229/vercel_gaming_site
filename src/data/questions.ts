@@ -59,7 +59,7 @@ export const GAME_QUESTIONS: Question[] = [
         id: 5,
         enemyName: "La Cucaracha que ya no puede caminar",
         question: "Un evento representa un dato númerico en un momento del tiempo, ¿Que puedes decir de esa afirmación?",
-        options: ["Es verdadera", "Es falsa, un evento es como un log con más contexto", "Es parcialmente verdadera, porque si es numérica", "Es parcialmente falsa, porque es en el tiempo"],
+        options: ["Es verdadera", "falso, un evento es un log enriquecido", "Maso, porque si es numérica", "Maso, porque es en el tiempo"],
         correctOptionIndex: 1,
         feedback: {
             success: "¡Bien hecho! Un evento es como un log pero enriquecido con metadata.",
