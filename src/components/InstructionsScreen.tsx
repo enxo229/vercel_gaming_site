@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useAudio } from '../contexts/AudioContext';
 
 export const InstructionsScreen: React.FC = () => {
     const { startBattle } = useGameStore();
     const { playSFX, playBGM } = useAudio();
+
+    useEffect(() => {
+        // Reproducir la canción de instrucciones al montar la pantalla
+        playSFX('instructions');
+    }, [playSFX]); // Run when component mounts, adhering to linter rules
 
     const FullTextContent = () => (
         <>

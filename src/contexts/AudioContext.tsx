@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useRef, useState, useEffect, type ReactNode } from 'react';
 
-type SFXType = 'hit' | 'correct' | 'click' | 'gameover' | 'victory' | 'leaderboard';
+type SFXType = 'hit' | 'correct' | 'click' | 'gameover' | 'victory' | 'leaderboard' | 'instructions';
 
 interface AudioContextType {
     isMuted: boolean;
@@ -29,7 +29,8 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         click: null,
         gameover: null,
         victory: null,
-        leaderboard: null
+        leaderboard: null,
+        instructions: null
     });
 
     useEffect(() => {
@@ -47,7 +48,8 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             click: new Audio('/sfx/click.wav'), // Kept as wav as fallback for UI clicks
             gameover: new Audio('/sfx/gameover.wav'),
             victory: new Audio('/sfx/win.mp3'),
-            leaderboard: new Audio('/sfx/leaderboard.mp3')
+            leaderboard: new Audio('/sfx/leaderboard.mp3'),
+            instructions: new Audio('/sfx/instructions.mp3')
         };
     }, []);
 
