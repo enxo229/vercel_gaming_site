@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { Heart } from 'lucide-react';
+import { useAudio } from '../contexts/AudioContext';
 
 const TITLES = [
     "Gran Oráculo de las Métricas",
@@ -14,6 +15,7 @@ const TITLES = [
 
 export const VictoryScreen: React.FC = () => {
     const { score, lives, resetGame, goToLeaderboard, submitScore } = useGameStore();
+    const { playSFX, stopBGM } = useAudio();
     const submitted = useRef(false);
     const [honorific, setHonorific] = useState('');
     const [showOfflineAlert, setShowOfflineAlert] = useState(false);
@@ -24,6 +26,10 @@ export const VictoryScreen: React.FC = () => {
             // Asignar apodo aleatorio
             const randomTitle = TITLES[Math.floor(Math.random() * TITLES.length)];
             setHonorific(randomTitle);
+
+            // Audio Logic
+            stopBGM();
+            playSFX('victory');
 
             submitScore().then(status => {
                 if (status === 'offline') setShowOfflineAlert(true);

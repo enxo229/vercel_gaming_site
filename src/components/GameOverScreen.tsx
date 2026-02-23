@@ -1,15 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { Skull } from 'lucide-react';
+import { useAudio } from '../contexts/AudioContext';
 
 export const GameOverScreen: React.FC = () => {
     const { score, currentLevel, resetGame, goToLeaderboard, submitScore, username } = useGameStore();
+    const { playSFX, stopBGM } = useAudio();
     const submitted = useRef(false);
     const [showOfflineAlert, setShowOfflineAlert] = useState(false);
 
     useEffect(() => {
         if (!submitted.current) {
             submitted.current = true;
+
+            // Audio Logic
+            stopBGM();
+            playSFX('gameover');
+
             submitScore().then(status => {
                 if (status === 'offline') setShowOfflineAlert(true);
             });

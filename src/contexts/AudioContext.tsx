@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useRef, useState, useEffect, type ReactNode } from 'react';
 
-type SFXType = 'hit' | 'correct' | 'click' | 'gameover' | 'victory';
+type SFXType = 'hit' | 'correct' | 'click' | 'gameover' | 'victory' | 'leaderboard';
 
 interface AudioContextType {
     isMuted: boolean;
@@ -24,20 +24,22 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         correct: null,
         click: null,
         gameover: null,
-        victory: null
+        victory: null,
+        leaderboard: null
     });
 
     useEffect(() => {
         // Inicializar audios solo en el cliente
-        bgmRef.current = new Audio('/sfx/bgm.wav');
+        bgmRef.current = new Audio('/sfx/bgm.mp3');
         bgmRef.current.loop = true;
 
         sfxRefs.current = {
-            hit: new Audio('/sfx/hit.wav'),
+            hit: new Audio('/sfx/hit.mp3'),
             correct: new Audio('/sfx/correct.wav'),
-            click: new Audio('/sfx/click.wav'),
+            click: new Audio('/sfx/click.wav'), // Kept as wav as fallback for UI clicks
             gameover: new Audio('/sfx/gameover.wav'),
-            victory: new Audio('/sfx/victory.wav')
+            victory: new Audio('/sfx/win.mp3'),
+            leaderboard: new Audio('/sfx/leaderboard.mp3')
         };
     }, []);
 

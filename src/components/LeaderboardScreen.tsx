@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { supabase } from '../lib/supabase';
 import { Loader2, RefreshCw } from 'lucide-react';
+import { useAudio } from '../contexts/AudioContext';
 
 interface LeaderboardEntry {
     username: string;
@@ -10,6 +11,7 @@ interface LeaderboardEntry {
 
 export const LeaderboardScreen: React.FC = () => {
     const { resetGame } = useGameStore();
+    const { playSFX, stopBGM } = useAudio();
     const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -31,6 +33,8 @@ export const LeaderboardScreen: React.FC = () => {
     };
 
     useEffect(() => {
+        stopBGM();
+        playSFX('leaderboard');
         fetchScores();
     }, []);
 
