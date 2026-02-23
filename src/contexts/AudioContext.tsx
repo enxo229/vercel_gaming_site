@@ -38,9 +38,12 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         bgmRef.current.loop = true;
         bgmRef.current.volume = 0.1; // Reducido a un 10% para que sea suave de fondo
 
+        const correctAudio = new Audio('/sfx/correct.mp3');
+        correctAudio.volume = 0.6;
+
         sfxRefs.current = {
             hit: new Audio('/sfx/hit.mp3'),
-            correct: new Audio('/sfx/correct.mp3'),
+            correct: correctAudio,
             click: new Audio('/sfx/click.wav'), // Kept as wav as fallback for UI clicks
             gameover: new Audio('/sfx/gameover.wav'),
             victory: new Audio('/sfx/win.mp3'),
