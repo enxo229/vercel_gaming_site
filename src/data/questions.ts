@@ -13,112 +13,112 @@ export interface Question {
 export const GAME_QUESTIONS: Question[] = [
     {
         id: 1,
-        enemyName: "La Araña de la Latencia",
-        question: "¿Qué métrica es fundamental para medir cuánto tarda una solicitud en ser procesada antes de devolver un error por timeout?",
-        options: ["Throughput", "Latencia", "Tasa de errores", "Saturación"],
-        correctOptionIndex: 1,
+        enemyName: "La Araña Embobadora",
+        question: "¿Cuál de los siguientes no es un pilar de la observabilidad en SETI?",
+        options: ["Throughput", "Logs", "Métricas", "Trazas"],
+        correctOptionIndex: 0,
         feedback: {
-            success: "¡Correcto! Has esquivado la telaraña de la latencia.",
-            failure: "¡Cuidado! La Araña de la Latencia te ha atrapado en sus retrasos."
+            success: "¡Correcto! No te dejaste embobar de la araña",
+            failure: "¡Cuidado! La Araña de la Latencia te ha embobado."
         }
     },
     {
         id: 2,
-        enemyName: "El Grillo del Silo de Datos",
-        question: "Si tienes tus logs en una herramienta, las métricas en otra, y las trazas en otra sin conexión entre ellas, ¿qué problema de observabilidad enfrentas?",
-        options: ["Falta de Alta Disponibilidad", "Silos de Datos", "Alerta Fatigada", "Fuga de Memoria"],
-        correctOptionIndex: 1,
+        enemyName: "El Grillo de los silos",
+        question: "Cuál de estas no es una capa de instrumentación en observabilidad?",
+        options: ["Infraestructura", "Aplicación", "Memoria Ram", "Experiencia del usuario"],
+        correctOptionIndex: 2,
         feedback: {
-            success: "¡Exacto! Centralizar la información es clave para correlacionar problemas.",
-            failure: "El grillo sigue cantando en su rincón aislado. Necesitamos romper esos silos."
+            success: "¡Exacto! La memoria RAM no es una capa de instrumentación",
+            failure: "El grillo es el que está cantando porque no pusiste atención."
         }
     },
     {
         id: 3,
-        enemyName: "La Abeja del Error 500",
-        question: "Un cliente reporta un Error '500 Internal Server Error'. ¿Cuál de los siguientes pilares de la observabilidad es el primer lugar donde buscar un 'Stack Trace'?",
-        options: ["Métricas (CPU/RAM)", "Logs (Registros)", "Traces (Trazas)", "Dashboards Financieros"],
-        correctOptionIndex: 1,
+        enemyName: "La Abeja de eBPF",
+        question: "Cuál de estos es el estandar para la instrumentación de aplicaciones en observabilidad?",
+        options: ["Grafana", "Zabbix", "DataDog", "OpenTelemetry"],
+        correctOptionIndex: 3,
         feedback: {
-            success: "¡Picadura evitada! Los logs son fundamentales para errores de código específicos.",
-            failure: "¡Ouch! La abeja del 500 te ha picado. Los logs tienen la respuesta."
+            success: "¡Picadura evitada! OpenTelemetry es el estandar para la instrumentación de aplicaciones en observabilidad.",
+            failure: "¡Ouch! La abeja de eBPF te ha picado. OpenTelemetry es el estandar para la instrumentación de aplicaciones en observabilidad."
         }
     },
     {
         id: 4,
-        enemyName: "El Mosquito de la Fuga de Memoria",
-        question: "Tu aplicación web se reinicia silenciosamente cada pocas horas. Las métricas muestran un aumento constante de RAM antes de caer. ¿Qué está ocurriendo?",
-        options: ["Ataque DDoS", "Cuello de botella en red", "Fuga de Memoria (Memory Leak)", "Base de datos caída"],
-        correctOptionIndex: 2,
+        enemyName: "La Avispa malévola",
+        question: "Cual de las siguientes es una ventaja de instrumentar con OpenTelemetry",
+        options: ["Evitar el Vendor Lock-in", "No necesitar servidores", "No necesitar bases de datos", "No necesitar capacidades de computo"],
+        correctOptionIndex: 0,
         feedback: {
-            success: "¡Plas! Has aplastado al mosquito chupa-memoria.",
-            failure: "El mosquito ha drenado toda tu RAM. ¡Vigila el uso de memoria!"
+            success: "¡Plas! Has acabado con la avispa malévola.",
+            failure: "La avispa malévola te ha picado. ¡Cuidado con el Vendor Lock-in!"
         }
     },
     {
         id: 5,
-        enemyName: "La Cucaracha del Cuello de Botella",
-        question: "La API responde lento, pero la CPU de la app está al 10%. ¿Qué herramienta te ayudaría mejor a descubrir que una consulta SQL específica en la BD es lenta?",
-        options: ["Logs del balanceador de carga", "Métricas del disco de la App", "Tracing Distribuido", "Ping a la base de datos"],
-        correctOptionIndex: 2,
+        enemyName: "La Cucaracha que ya no puede caminar",
+        question: "Un evento representa un dato númerico en un momento del tiempo, ¿Que puedes decir de esa afirmación?",
+        options: ["Es verdadera", "Es falsa, un evento es como un log con más contexto", "Es parcialmente verdadera, porque si es numérica", "Es parcialmente falsa, porque es en el tiempo"],
+        correctOptionIndex: 1,
         feedback: {
-            success: "¡Bien hecho! El Tracing permite ver el flujo completo y detectar qué paso es lento.",
-            failure: "La cucaracha se ha escondido en la base de datos. Tracing es la solución."
+            success: "¡Bien hecho! Un evento es como un log pero enriquecido con metadata.",
+            failure: "La cucaracha se te metió en la ropa interior."
         }
     },
     {
         id: 6,
-        enemyName: "La Avispa de la Falsa Alarma",
-        question: "Recibes 100 correos de alerta por hora de que el CPU está al 75%, pero el servicio funciona perfectamente. ¿Qué concepto de SRE estás violando?",
-        options: ["SLAs", "Seguimiento de Errores", "Fatiga de Alertas (Alert Fatigue)", "Monitoreo Sintético"],
+        enemyName: "La Mariquita de la Fatiga",
+        question: "Cuál de las siguientes opciones describe mejor el concepto de 'Fatiga de Alertas'?",
+        options: ["Es cuando una alerta es cansona", "Cuando el alertamiento no es efectivo", "Es cuando las alertas no implican un accionable", "Es cuando me llama mi amá"],
         correctOptionIndex: 2,
         feedback: {
-            success: "¡Despejado! Ajustar los umbrales evita la fatiga de alertas.",
-            failure: "Zumbidos constantes de alertas ignoradas. ¡Cuidado con la fatiga!"
+            success: "Bien dicho! Las alertas que no implican un accionable son ruido.",
+            failure: "Te zumba la mariquita, más mariquita el que no arregla las alertas."
         }
     },
     {
         id: 7,
-        enemyName: "La Hormiga Roja del Tráfico Alto",
-        question: "Tu sitio de e-commerce lanza una oferta y el número de requests por segundo (Throughput) se multiplica por 10. ¿Qué métrica de oro (Golden Signals) indica este volumen?",
-        options: ["Tráfico (Traffic / Rate)", "Latencia (Latency)", "Errores (Errors)", "Saturación (Saturation)"],
-        correctOptionIndex: 0,
+        enemyName: "El Zancudo de las señales doradas",
+        question: "Cuál de las respuesta tiene las verdaderas y famosas señales doradas?",
+        options: ["Tráfico, Latencia, Errores y CPU", "Latencia, Errores, Tiempo de respuesta y Saturación", "CPU, Memoria, Disco y Red", "Latencia, Errores, Trafico, Saturación"],
+        correctOptionIndex: 3,
         feedback: {
-            success: "¡Resististe la invasión! Medir el tráfico entrante es esencial.",
-            failure: "Las hormigas rojas sobresaturaron tu servidor."
+            success: "¡Aniquilaste el Zancudo! si sabes cuáles son las 'Golden Signals'.",
+            failure: "El zancudo te picó, las golden signals son Latencia, Errores, Trafico y Saturación."
         }
     },
     {
         id: 8,
-        enemyName: "La Oruga del Downtime",
-        question: "Has prometido a tus clientes que tu servicio estará disponible el 99.9% del tiempo este mes. ¿A qué concepto de SRE corresponde esta promesa?",
-        options: ["SLI (Service Level Indicator)", "SLO (Service Level Objective) / SLA", "Error Budget", "MTTR (Mean Time to Repair)"],
-        correctOptionIndex: 1,
+        enemyName: "Cucarrón M13rd3r0",
+        question: "Existe un método para instrumentar aplicaciones en linux y k8s sin modificar el código fuente, cuál de los siguientes es?",
+        options: ["Cloud Control", "eBPF", "Grafana", "Zabbix"],
+        correctOptionIndex: 0,
         feedback: {
-            success: "¡Protegiste tus acuerdos de Service Level!",
-            failure: "La oruga se comió tu presupuesto de errores (Error Budget)."
+            success: "¡Excelente! eBPF es una tecnología que permite ejecutar código personalizado en el kernel de Linux sin modificar el código fuente de las aplicaciones.",
+            failure: "¡Te dioo! El Cucarrón M13rd3r0 te ha dado duro."
         }
     },
     {
         id: 9,
-        enemyName: "La Polilla de la Configuración",
+        enemyName: "La Mantis de la Configuración",
         question: "Una nueva versión se despliega y todo se rompe, aunque el código está bien. Un valor en una variable de entorno estaba vacío. ¿Cómo ayuda la observabilidad aquí?",
         options: ["Registrando eventos de despliegue y cambios de configuración", "Ignorando las variables de entorno", "Apagando el servidor", "Aumentando la memoria RAM"],
         correctOptionIndex: 0,
         feedback: {
             success: "¡Desplegaste la red correcta! Correlacionar eventos de CI/CD es observabilidad avanzada.",
-            failure: "La polilla oscureció tus variables de entorno..."
+            failure: "La Mantis ha atacado al heroe..."
         }
     },
     {
         id: 10,
-        enemyName: "El Escarabajo del Nodo Caído",
-        question: "El servidor principal se apaga abruptamente (Crash). ¿Qué métrica te indicaría la capacidad restante de tu clúster tras el fallo?",
-        options: ["Latencia P99", "Tráfico entrante", "Saturación (Saturation)", "Resolución de DNS"],
+        enemyName: "El Zapato mata hormigas",
+        question: "Los usuarios finales de una aplicación reportan que la aplicación está lenta, el cliente dice que es un problema en la base de datos, pero los logs no muestran errores. ¿Cuál de los pilares de la observabilidad te ayudaría a identificar el problema?",
+        options: ["Métricas", "Logs", "Trazas", "Todas las anteriores"],
         correctOptionIndex: 2,
         feedback: {
-            success: "¡Victoria Absoluta! Entender la saturación evita fallos en cascada.",
-            failure: "El Escarabajo hizo colapsar el resto de tus nodos por sobrecarga."
+            success: "¡No quedaste como un zapato! Las trazas te ayudarían a identificar desde la aplicación hasta la base de datos el problema.",
+            failure: "¡Quedaste como un zapato! Las trazas te ayudarían a identificar desde la aplicación hasta la base de datos el problema."
         }
     }
 ];
