@@ -1,18 +1,50 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { supabase } from '../lib/supabase';
+import { Loader2 } from 'lucide-react';
 
 export const StartScreen: React.FC = () => {
     const { username, setUsername, startGame, goToLeaderboard } = useGameStore();
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleStart = (e: React.FormEvent) => {
+    const handleStart = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (username.trim().length < 3) {
-            setError('Mínimo 3 letras!');
+
+        const trimmedUser = username.trim();
+        if (trimmedUser.length < 3) {
+            setError('¡Mínimo 3 letras!');
             return;
         }
+
+        setIsLoading(true);
         setError('');
-        startGame();
+
+        try {
+            // Check if username already exists in Supabase
+            const { data, error: sbError } = await supabase
+                .from('leaderboard')
+                .select('username')
+                .eq('username', trimmedUser)
+                .maybeSingle();
+
+            if (sbError) throw sbError;
+
+            if (data) {
+                // User exists, block entry
+                setError('⚠️ ALIAS EN USO. INGRESA OTRO.');
+                setIsLoading(false);
+                return;
+            }
+
+            // User is unique, proceed to game
+            setIsLoading(false);
+            startGame();
+        } catch (err) {
+            console.error('Error verifying user:', err);
+            setError('Error de conexión. Reintenta.');
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -52,9 +84,17 @@ export const StartScreen: React.FC = () => {
                     <div className="flex flex-col gap-3 mt-4">
                         <button
                             type="submit"
-                            className="bg-white border-4 border-[#2d1b00] py-3 px-6 text-xs md:text-sm font-['Press_Start_2P'] text-[#2d1b00] uppercase shadow-[4px_4px_0px_#2d1b00] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_#2d1b00] transition-all active:bg-gray-200"
+                            disabled={isLoading}
+                            className="bg-white border-4 border-[#2d1b00] py-3 px-6 flex justify-center items-center gap-2 text-xs md:text-sm font-['Press_Start_2P'] text-[#2d1b00] uppercase shadow-[4px_4px_0px_#2d1b00] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_#2d1b00] transition-all active:bg-gray-200 disabled:opacity-75 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[4px_4px_0px_#2d1b00]"
                         >
-                            START
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin text-[#2d1b00]" />
+                                    <span>VALIDANDO...</span>
+                                </>
+                            ) : (
+                                "START"
+                            )}
                         </button>
 
                         <button
