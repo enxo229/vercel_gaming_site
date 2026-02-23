@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { GAME_QUESTIONS } from '../data/questions';
 import { Heart } from 'lucide-react';
+import { useAudio } from '../contexts/AudioContext';
 const MAX_TIME_MS = 20000;
 export const PlayingScreen: React.FC = () => {
     const { lives, score, currentLevel, username, answerQuestion } = useGameStore();
+    const { playSFX } = useAudio();
     const currentQ = GAME_QUESTIONS[currentLevel - 1];
 
     const [timeLeft, setTimeLeft] = useState(MAX_TIME_MS);
@@ -43,6 +45,7 @@ export const PlayingScreen: React.FC = () => {
 
     const handleTimeOut = () => {
         stopTimer();
+        playSFX('hit');
         setFeedback({ isCorrect: false, message: '¡El tiempo se ha agotado!' });
         setTimeout(() => {
             answerQuestion(false, MAX_TIME_MS);
@@ -61,6 +64,8 @@ export const PlayingScreen: React.FC = () => {
             isCorrect,
             message: isCorrect ? currentQ.feedback.success : currentQ.feedback.failure
         });
+
+        playSFX(isCorrect ? 'correct' : 'hit');
 
         setTimeout(() => {
             answerQuestion(isCorrect, timeTakenMs);

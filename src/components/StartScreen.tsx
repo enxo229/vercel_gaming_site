@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { supabase } from '../lib/supabase';
 import { Loader2 } from 'lucide-react';
+import { useAudio } from '../contexts/AudioContext';
 
 export const StartScreen: React.FC = () => {
     const { username, setUsername, startGame, goToLeaderboard } = useGameStore();
+    const { playBGM } = useAudio();
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -39,6 +41,7 @@ export const StartScreen: React.FC = () => {
 
             // User is unique, proceed to game
             setIsLoading(false);
+            playBGM();
             startGame();
         } catch (err) {
             console.error('Error verifying user:', err);
