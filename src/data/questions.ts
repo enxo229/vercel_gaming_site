@@ -93,7 +93,7 @@ export const GAME_QUESTIONS: Question[] = [
         enemyName: "Cucarrón M13rd3r0",
         question: "Existe un método para instrumentar aplicaciones en linux y k8s sin modificar el código fuente, cuál de los siguientes es?",
         options: ["Cloud Control", "eBPF", "Grafana", "Zabbix"],
-        correctOptionIndex: 0,
+        correctOptionIndex: 1,
         feedback: {
             success: "¡Excelente! eBPF es una tecnología que permite ejecutar código personalizado en el kernel de Linux sin modificar el código fuente de las aplicaciones.",
             failure: "¡Te dioo! El Cucarrón M13rd3r0 te ha dado duro."
