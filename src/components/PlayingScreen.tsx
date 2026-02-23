@@ -82,11 +82,11 @@ export const PlayingScreen: React.FC = () => {
     };
 
     return (
-        <div className="w-full h-screen max-w-lg md:max-w-4xl mx-auto flex flex-col font-sans select-none">
+        <div className="w-full h-screen max-w-lg md:max-w-4xl mx-auto flex flex-col font-sans select-none overflow-hidden">
 
-            {/* 65% BATTLE ARENA */}
+            {/* BATTLE ARENA (50vh mobile, 55vh md) */}
             <div
-                className="relative w-full h-[65vh] overflow-hidden bg-cover bg-bottom"
+                className="relative w-full h-[50vh] md:h-[55vh] overflow-hidden bg-cover bg-bottom flex-shrink-0"
                 style={{ backgroundImage: `url("${getBackgroundImage()}")` }}
             >
                 {/* Arena Background circles/ellipses (Optional decorative to ground sprites) */}
@@ -157,31 +157,31 @@ export const PlayingScreen: React.FC = () => {
                 </div>
             </div>
 
-            {/* 35% ACTION PANEL (Dialogue & Buttons) */}
-            <div className="w-full h-[35vh] bg-[#f8f0e3] border-t-[6px] border-[#2d1b00] p-4 md:p-6 flex flex-col z-30 shadow-[0_-8px_0px_#2d1b00] relative font-['Press_Start_2P']">
+            {/* ACTION PANEL (50vh mobile, 45vh md) */}
+            <div className="w-full flex-1 min-h-[50vh] md:min-h-[45vh] bg-[#f8f0e3] border-t-[6px] border-[#2d1b00] p-4 md:p-6 flex flex-col z-30 shadow-[0_-8px_0px_#2d1b00] relative font-['Press_Start_2P'] overflow-hidden">
 
                 {/* Doble Borde dorado interno simulado */}
-                <div className="absolute inset-x-0 top-0 bottom-0 border-4 border-t-0 border-[#d4af37] pointer-events-none"></div>
+                <div className="absolute inset-x-0 top-0 bottom-0 border-4 border-t-0 border-[#d4af37] pointer-events-none z-20"></div>
 
-                <div className="flex flex-col h-full gap-4 relative z-10">
+                <div className="flex flex-col h-full gap-4 relative z-10 overflow-y-auto custom-scrollbar pr-2 pb-4">
                     {/* QUESTION TEXT */}
-                    <div className="flex-1 border-b-4 border-[#2d1b00] pb-2">
-                        <p className="text-[10px] md:text-xs leading-loose uppercase text-[#2d1b00]">
+                    <div className="border-b-4 border-[#2d1b00] pb-4 flex-shrink-0">
+                        <p className="text-[10px] md:text-xs leading-loose md:leading-loose uppercase text-[#2d1b00] break-words">
                             {currentQ.question}
                         </p>
                     </div>
 
-                    {/* GRID 2x2 BUTTONS */}
-                    <div className="grid grid-cols-2 grid-rows-2 gap-3 h-1/2">
+                    {/* GRID BUTTONS */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1">
                         {currentQ.options.map((option, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleOptionClick(index)}
                                 disabled={feedback !== null}
-                                className="bg-white border-4 border-[#2d1b00] text-[#2d1b00] hover:bg-gray-200 text-[8px] md:text-[10px] text-left px-3 uppercase flex items-center shadow-[4px_4px_0px_#2d1b00] disabled:opacity-50 disabled:shadow-[4px_4px_0px_#2d1b00] transition-transform active:translate-x-1 active:translate-y-1 active:shadow-[0px_0px_0px_#2d1b00]"
+                                className="bg-white border-4 border-[#2d1b00] text-[#2d1b00] hover:bg-gray-200 text-[8px] md:text-[10px] text-left p-3 uppercase flex items-center shadow-[4px_4px_0px_#2d1b00] disabled:opacity-50 disabled:shadow-[4px_4px_0px_#2d1b00] transition-transform active:translate-x-1 active:translate-y-1 active:shadow-[0px_0px_0px_#2d1b00]"
                             >
-                                <span className="text-[#d4af37] font-bold mr-2 text-[10px] drop-shadow-[1px_1px_0px_#2d1b00]">{">"}</span>
-                                <span className="truncate">{option}</span>
+                                <span className="text-[#d4af37] font-bold mr-2 text-[10px] drop-shadow-[1px_1px_0px_#2d1b00] flex-shrink-0">{">"}</span>
+                                <span className="break-words leading-loose md:leading-loose w-full">{option}</span>
                             </button>
                         ))}
                     </div>
