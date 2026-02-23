@@ -25,7 +25,7 @@ export const VictoryScreen: React.FC = () => {
             const randomTitle = TITLES[Math.floor(Math.random() * TITLES.length)];
             setHonorific(randomTitle);
 
-            submitScore(randomTitle).then(status => {
+            submitScore().then(status => {
                 if (status === 'offline') setShowOfflineAlert(true);
             });
         }

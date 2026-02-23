@@ -15,7 +15,7 @@ interface GameState {
     setScreen: (screen: GameScreen) => void;
     resetGame: () => void;
     goToLeaderboard: () => void;
-    submitScore: (alias?: string) => Promise<'success' | 'offline' | 'error'>;
+    submitScore: () => Promise<'success' | 'offline' | 'error'>;
 }
 
 const MAX_LEVELS = 10;
@@ -83,27 +83,25 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     goToLeaderboard: () => set({ screen: 'LEADERBOARD' }),
 
-    submitScore: async (alias?: string) => {
+    submitScore: async () => {
         const { username, score } = get();
         if (score === 0 || !username) return 'error';
 
-        const finalName = alias ? `${username} - ${alias}` : username;
-
         try {
             const { supabase } = await import('../lib/supabase');
-            const { error } = await supabase.from('leaderboard').insert([{ username: finalName, score }]);
+            const { error } = await supabase.from('leaderboard').insert([{ username, score }]);
 
             if (error) {
                 console.error('Error enviando puntuación:', error);
                 // Si falla la inserción por un error (p.ej. de red), guardar offline
-                localStorage.setItem('offline_pending_score', JSON.stringify({ username: finalName, score }));
+                localStorage.setItem('offline_pending_score', JSON.stringify({ username, score }));
                 return 'offline';
             }
             return 'success';
         } catch (err) {
             console.error('Error de red enviando score:', err);
             // Capturar la caída de red o timeout
-            localStorage.setItem('offline_pending_score', JSON.stringify({ username: finalName, score }));
+            localStorage.setItem('offline_pending_score', JSON.stringify({ username, score }));
             return 'offline';
         }
     }
