@@ -92,3 +92,23 @@ body {
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
+
+/* Custom Scrollbar for Leaderboard */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 4px;
+  border: 2px solid #f8f0e3;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #2d1b00;
+}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { supabase } from '../lib/supabase';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCw } from 'lucide-react';
 
 interface LeaderboardEntry {
     username: string;
@@ -13,24 +13,24 @@ export const LeaderboardScreen: React.FC = () => {
     const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const fetchScores = async () => {
+        setLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from('leaderboard')
+                .select('username, score')
+                .order('score', { ascending: false });
+
+            if (error) throw error;
+            setEntries(data || []);
+        } catch (err) {
+            console.error('Error fetching leaderboard:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchScores = async () => {
-            try {
-                const { data, error } = await supabase
-                    .from('leaderboard')
-                    .select('username, score')
-                    .order('score', { ascending: false })
-                    .limit(10);
-
-                if (error) throw error;
-                setEntries(data || []);
-            } catch (err) {
-                console.error('Error fetching leaderboard:', err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchScores();
     }, []);
 
@@ -91,12 +91,19 @@ export const LeaderboardScreen: React.FC = () => {
                     )}
                 </div>
 
-                <div className="mt-8 flex justify-center">
+                <div className="mt-8 flex justify-center gap-4">
                     <button
                         onClick={resetGame}
-                        className="bg-white border-4 border-[#2d1b00] py-3 px-6 md:py-4 md:px-8 text-[10px] md:text-xs text-[#2d1b00] uppercase shadow-[4px_4px_0px_#2d1b00] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_#2d1b00] transition-all active:bg-gray-200"
+                        className="bg-white border-4 border-[#2d1b00] py-3 px-4 md:py-4 md:px-6 text-[10px] md:text-xs text-[#2d1b00] uppercase shadow-[4px_4px_0px_#2d1b00] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_#2d1b00] transition-all active:bg-gray-200"
                     >
                         VOLVER AL INICIO
+                    </button>
+                    <button
+                        onClick={fetchScores}
+                        className="bg-[#d4af37] border-4 border-[#2d1b00] py-3 px-4 md:py-4 md:px-6 text-[10px] md:text-xs text-[#2d1b00] uppercase shadow-[4px_4px_0px_#2d1b00] hover:translate-y-1 hover:translate-x-1 hover:shadow-[0px_0px_0px_#2d1b00] transition-all active:bg-[#c49b27] flex items-center justify-center"
+                        title="Actualizar ranking"
+                    >
+                        <RefreshCw className={`w-4 h-4 md:w-5 md:h-5 ${loading ? 'animate-spin' : ''}`} />
                     </button>
                 </div>
 

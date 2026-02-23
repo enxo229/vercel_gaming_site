@@ -19,12 +19,13 @@ export const VictoryScreen: React.FC = () => {
     const [showOfflineAlert, setShowOfflineAlert] = useState(false);
 
     useEffect(() => {
-        // Asignar apodo aleatorio
-        setHonorific(TITLES[Math.floor(Math.random() * TITLES.length)]);
-
         if (!submitted.current) {
             submitted.current = true;
-            submitScore().then(status => {
+            // Asignar apodo aleatorio
+            const randomTitle = TITLES[Math.floor(Math.random() * TITLES.length)];
+            setHonorific(randomTitle);
+
+            submitScore(randomTitle).then(status => {
                 if (status === 'offline') setShowOfflineAlert(true);
             });
         }
